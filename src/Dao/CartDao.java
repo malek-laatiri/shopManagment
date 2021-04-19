@@ -6,27 +6,71 @@
 package Dao;
 
 import Entity.Cart;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.sql.*;
 
 /**
  *
  * @author malek
  */
-public class CartDao implements CRUD<Cart>{
+public class CartDao implements CRUD<Cart> {
+
+    Connection con = null;
+    Statement st=null;
 
     @Override
     public int create(Cart object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection con = DbDao.getConnection();
+        int res = 0;
+        if (con != null) {
+            try {
+                st = con.createStatement();
+                //creer des requetes
+                res = st.executeUpdate("insert into personne values (" + num + ",'" + nom + "','" + prenom + "'," + moy + ")");
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+        }
+        return res;
     }
 
     @Override
     public int delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int res = 0;
+        if (con != null) {
+            try {
+                st = con.createStatement();
+
+                st = con.createStatement();
+                //creer des requetes
+                res = st.executeUpdate("delete from personne where numero=" + num);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+        }
+        return res;
     }
 
     @Override
-    public Cart update(Cart object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int update(Cart object) {
+        int res = 0;
+        if (con != null) {
+            try {
+                st = con.createStatement();
+                //creer des requetes
+                res = st.executeUpdate("update personne set nom='" + nom + "',prenom='" + prenom + "',moyenne='" + moy + "' where numero=" + num);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+        }
+        return res;
     }
 
     @Override
@@ -35,8 +79,23 @@ public class CartDao implements CRUD<Cart>{
     }
 
     @Override
-    public ArrayList<Cart> read() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ResultSet read() {
+        ResultSet rs = null;
+
+        if (st != null) {
+            try {
+                st = con.createStatement();
+
+                rs = st.executeQuery("select * from personne");
+                System.out.println("done getAllPersonne");
+                return rs;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+
+        }
+        return rs;
     }
-    
+
 }

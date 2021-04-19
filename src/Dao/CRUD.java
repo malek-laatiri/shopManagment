@@ -5,6 +5,7 @@
  */
 package Dao;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 public interface CRUD <T> {
     int create(T object);
     int delete(int id);
-    T update(T object);
+    int update(T object);
     T readById(int id);
-    ArrayList<T> read();
+    ResultSet read();
 }

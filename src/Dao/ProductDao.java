@@ -6,7 +6,7 @@
 package Dao;
 
 import Entity.Product;
-import java.util.ArrayList;
+import java.sql.ResultSet;
 
 /**
  *
@@ -25,7 +25,7 @@ public class ProductDao implements CRUD<Product>{
     }
 
     @Override
-    public Product update(Product object) {
+    public int update(Product object) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -35,8 +35,10 @@ public class ProductDao implements CRUD<Product>{
     }
 
     @Override
-    public ArrayList<Product> read() {
+    public ResultSet read() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+   
     
 }

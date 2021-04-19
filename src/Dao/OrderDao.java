@@ -5,10 +5,13 @@
  */
 package Dao;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author malek
  */
-public class OrderDao {
+public class OrderDao implements CRUD<OrderDao>{
+
     
 }
