@@ -6,6 +6,8 @@
 package shop;
 
 import Dao.DbDao;
+import Dao.UserDao;
+import Entity.User;
 import IHM.Login;
 import java.sql.*;
 
@@ -20,6 +22,10 @@ public class Shop {
      */
     public static void main(String[] args) {
         Connection db=DbDao.getConnection();
+        User user=new User();
+        user.setUser_name("mm");
+        user.setUser_password("mm");
+        //System.out.println(new UserDao().readByUsernamePassword(user));
          Login n = new Login();
         n.setVisible(true);
     }

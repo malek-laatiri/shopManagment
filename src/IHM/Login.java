@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -19,10 +20,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
@@ -63,7 +66,6 @@ public class Login extends JFrame {
         pano.add(lb_pass);
 
         f_pass = new JPasswordField(10);
-        f_pass.setText("Tapper votre nom");
         f_pass.addFocusListener(new Ecouteur());
         pano.add(f_pass);
 
@@ -256,8 +258,26 @@ public class Login extends JFrame {
                 jfc = new JFileChooser("/");
                 jfc.showOpenDialog(Login.this);
             }
+            if (e.getSource() == login) {
+
+                User user = new User();
+
+                user.setUser_name(f_username.getText());
+                user.setUser_password(f_pass.getText());
+                System.out.println(user);
+
+                User ret = new UserDao().readByUsernamePassword(user);
+                System.out.println(ret);
+                if (ret.getUser_id() != 0) {
+                    Login.getFrames()[0].dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error credentials", "Error", JOptionPane.ERROR_MESSAGE);
+
+                }
+            }
+
             if (e.getSource() == register) {
-                                    System.out.println("Register");
+                System.out.println("Register");
 
                 User user = new User();
                 user.setUser_email(f_reg_email.getText());
@@ -272,12 +292,17 @@ public class Login extends JFrame {
 
                 }
                 user.setUser_img(jfc.getSelectedFile().getName());
-                try{
+                try {
                     System.out.println("Register");
                     System.out.println(user);
-                    new UserDao().create(user);
-                }
-                catch(Exception err){
+
+                    if (new UserDao().create(user) != 0) {
+                        ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+                        JOptionPane.showMessageDialog(null, "Registration Completed", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
+                    } else {
+
+                    }
+                } catch (Exception err) {
                     err.getMessage();
                 }
             }
