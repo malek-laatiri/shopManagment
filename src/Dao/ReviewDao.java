@@ -6,7 +6,9 @@
 package Dao;
 
 import Entity.Review;
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -37,8 +39,23 @@ public class ReviewDao implements CRUD<Review>{
 
     @Override
     public ResultSet read() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+      Connection con = DbDao.getConnection();
+
+        ResultSet rs = null;
+        Statement st = null;
+        if (st != null) {
+            try {
+                st = con.createStatement();
+
+                rs = st.executeQuery("select * from product natural join category");
+                return rs;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+
+        }
+        return rs;    }
 
     
     

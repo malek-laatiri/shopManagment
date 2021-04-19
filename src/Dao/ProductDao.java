@@ -6,17 +6,48 @@
 package Dao;
 
 import Entity.Product;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author malek
  */
-public class ProductDao implements CRUD<Product>{
+public class ProductDao implements CRUD<Product> {
+
+    Connection con = null;
+    PreparedStatement st = null;
 
     @Override
     public int create(Product object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection con = DbDao.getConnection();
+        int res = 0;
+        if (con != null) {
+            try {
+                st = con.prepareStatement("insert into product(product_name,product_description,product_category,product_stock,product_price,product_img) values (?,?,?,?,?,?)");
+                st.setString(1, object.getProduct_name());
+                st.setString(2, object.getProduct_description());
+                st.setInt(3, object.getProduct_category());
+                st.setInt(4, object.getProduct_stock());
+                st.setDouble(5, object.getProduct_price());
+                st.setString(6, object.getProduct_img());
+
+                res = st.executeUpdate();
+                if (res != 0) {
+
+                    return res;
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println(e.getMessage());
+
+            }
+        }
+        return res;
     }
 
     @Override
@@ -26,7 +57,28 @@ public class ProductDao implements CRUD<Product>{
 
     @Override
     public int update(Product object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection con = DbDao.getConnection();
+        int res = 0;
+        if (con != null) {
+            try {
+                st = con.prepareStatement("update user set product_name=?,product_description=?,product_category=?,product_stock=?,product_price=?,product_img=?");
+                st.setString(1, object.getProduct_name());
+                st.setString(2, object.getProduct_description());
+                st.setInt(3, object.getProduct_category());
+                st.setInt(4, object.getProduct_stock());
+                st.setDouble(5, object.getProduct_price());
+                st.setString(6, object.getProduct_img());
+                res = st.executeUpdate();
+                if (res != 0) {
+                    return res;
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+        }
+        return res;
     }
 
     @Override
@@ -36,9 +88,43 @@ public class ProductDao implements CRUD<Product>{
 
     @Override
     public ResultSet read() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection con = DbDao.getConnection();
+
+        ResultSet rs = null;
+        Statement st = null;
+        if (st != null) {
+            try {
+                st = con.createStatement();
+
+                rs = st.executeQuery("select * from product natural join category");
+                return rs;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+
+        }
+        return rs;
     }
 
-   
-    
+    public ResultSet readByCategory(int category) {
+        Connection con = DbDao.getConnection();
+
+        ResultSet rs = null;
+        Statement st = null;
+        if (st != null) {
+            try {
+                st = con.createStatement();
+
+                rs = st.executeQuery("select * from product join category on product.product_category=category.category_id where product_category=" + category);
+                return rs;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+
+        }
+        return rs;
+    }
+
 }
