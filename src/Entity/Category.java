@@ -25,8 +25,13 @@ public class Category {
         return category_name;
     }
 
-    public void setCategiry_name(String categiry_name) {
+    public void setCategory_name(String categiry_name) {
         this.category_name = categiry_name;
+    }
+
+    @Override
+    public String toString() {
+        return category_id + "." + category_name ;
     }
     
 }

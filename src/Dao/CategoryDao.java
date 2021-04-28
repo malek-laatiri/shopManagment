@@ -83,18 +83,17 @@ public class CategoryDao implements CRUD<Category> {
 
         ResultSet rs = null;
         Statement st = null;
-        if (st != null) {
             try {
                 st = con.createStatement();
 
                 rs = st.executeQuery("select * from category");
                 return rs;
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());
 
             }
 
-        }
+        
         return rs;
     }
 

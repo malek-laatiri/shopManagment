@@ -9,8 +9,10 @@ import Dao.DbDao;
 import Dao.UserDao;
 import Entity.User;
 import IHM.Login;
+import IHM.ProductAdd;
 import IHM.Seller;
 import java.sql.*;
+import javax.swing.JFrame;
 
 /**
  *
@@ -23,11 +25,7 @@ public class Shop {
      */
     public static void main(String[] args) {
         Connection db=DbDao.getConnection();
-      
-        //System.out.println(new UserDao().readByUsernamePassword(user));
-         Login n = new Login();
-         Seller s=new Seller();
-        s.setVisible(true);
+         new Login().setVisible(true);
     }
     
 }
