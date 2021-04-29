@@ -5,6 +5,7 @@
  */
 package IHM;
 
+import Dao.CategoryDao;
 import Dao.ProductDao;
 import Entity.User;
 import java.awt.BorderLayout;
@@ -72,6 +73,8 @@ public class Seller extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 ModelProduct model = new ModelProduct(new ProductDao().read());
                 jt = new JTable(model);
+                jt.setRowHeight(200);
+
                 jt.addMouseListener(new Ecouteur());
                 scr = new JScrollPane(jt);//!!!!!
                 JPanel p1 = new JPanel();
@@ -88,6 +91,30 @@ public class Seller extends JFrame {
         addCategory = new JMenuItem("Add category");
         allCategory = new JMenuItem("All categories");
         category.add(addCategory);
+          addCategory.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                JPanel p1 = new JPanel();
+                p1.setLayout(new FlowLayout());
+                tp.add("Add Category", p1.add(new CategoryAdd()));
+
+            }
+
+        });
+            allCategory.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                ModelCategory model = new ModelCategory(new CategoryDao().read());
+                jt = new JTable(model);
+                jt.addMouseListener(new Ecouteur());
+                scr = new JScrollPane(jt);//!!!!!
+                JPanel p1 = new JPanel();
+                p1.setLayout(new FlowLayout());
+                tp.add("All products", p1.add(scr));
+
+            }
+
+        });
         category.add(allCategory);
 
         profil = new JMenu("profil");

@@ -5,32 +5,27 @@
  */
 package IHM;
 
-import Dao.ProductDao;
-import java.awt.Image;
+import Dao.CategoryDao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.table.AbstractTableModel;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 /**
  *
  * @author malek
  */
-public class ModelProduct extends AbstractTableModel {
+public class ModelCategory extends AbstractTableModel {
 
     ResultSetMetaData rsmd;
     int nbligne;
     int nbc;
     ArrayList<Object[]> data = new ArrayList<Object[]>();
-    ProductDao pm;
+    CategoryDao pm;
 
-    public ModelProduct(ResultSet rs) {
+    public ModelCategory(ResultSet rs) {
         super();
         try {
             rsmd = rs.getMetaData();
@@ -39,24 +34,12 @@ public class ModelProduct extends AbstractTableModel {
                 nbligne++;
                 Object[] ligne = new Object[rsmd.getColumnCount()];
                 for (int i = 0; i < ligne.length; i++) {
-                    if (i == 5) {
-                        ImageIcon img = new ImageIcon(System.getProperty("user.dir") + "/src/images/" + rs.getObject(i + 1));
-                        Image image = img.getImage(); // transform it 
-                        Image newimg = image.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-                        img = new ImageIcon(newimg);  // transform it back
-                        ligne[i] = img;
-                        super.setValueAt(img, nbligne, i);
-
-                        //ligne[i] = new ImageIcon("/home/malek/NetBeansProjects/shop/src/images/fixed.jpg");
-                    } else {
-                        ligne[i] = rs.getObject(i + 1);
-
-                    }
+                    ligne[i] = rs.getObject(i + 1);
                 }
                 data.add(ligne);
 
             }
-
+            
         } catch (Exception ex) {
             ex.getMessage();
         }
@@ -78,7 +61,7 @@ public class ModelProduct extends AbstractTableModel {
         try {
             return new Object[rsmd.getColumnCount()].length;
         } catch (SQLException ex) {
-            Logger.getLogger(ModelProduct.class.getName()).log(Level.SEVERE, null, ex);
+           ex.getMessage();
         }
         return 0;
     }
@@ -117,7 +100,7 @@ public class ModelProduct extends AbstractTableModel {
 
     void supprimerPersonne(int selectedRow) {
         Object[] p = data.get(selectedRow);
-        pm = new ProductDao();
+        pm = new CategoryDao();
         System.err.println(p[nameToIndice("numero")] + "");
         pm.delete(Integer.parseInt(p[nameToIndice("numero")] + ""));
         data.remove(selectedRow);
@@ -133,13 +116,5 @@ public class ModelProduct extends AbstractTableModel {
             }
         }
         return a;
-    }
-
-    @Override
-    public Class<?> getColumnClass(int column) {
-        if (column == 5) {
-            return ImageIcon.class;
-        }
-        return Object.class;
     }
 }

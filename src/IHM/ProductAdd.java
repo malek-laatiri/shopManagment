@@ -7,12 +7,8 @@ package IHM;
 
 import Dao.CategoryDao;
 import Dao.ProductDao;
-import Dao.UserDao;
 import Entity.Category;
 import Entity.Product;
-import com.mysql.jdbc.ResultSetImpl;
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -20,17 +16,16 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.lang.Integer.parseInt;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -51,7 +46,8 @@ public class ProductAdd extends JPanel {
     JLabel namelb, desclb, catlb, pricel, stocklb, imglb;
     JButton fichier, done;
     DefaultListModel model;
-JFileChooser jfc;
+    JFileChooser jfc;
+
     public ProductAdd() {
         this.setLayout(new GridBagLayout());
 
@@ -176,12 +172,19 @@ JFileChooser jfc;
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
             if (e.getSource() == fichier) {
                 jfc = new JFileChooser("/Desktop");
                 jfc.showOpenDialog(ProductAdd.this);
             } else {
-                System.err.println(cat.getSelectedItem());
+                Path source = Paths.get(jfc.getSelectedFile().getAbsolutePath());
+                Path target = Paths.get(System.getProperty("user.dir") + "/src/images/" + jfc.getSelectedFile().getName());
+                try {
+                    Files.move(source, target);
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
+
                 Product p = new Product();
                 p.setProduct_description(inputDesc.getText());
                 p.setProduct_img(jfc.getSelectedFile().getName());
@@ -189,12 +192,12 @@ JFileChooser jfc;
                 p.setProduct_price(Double.parseDouble(inputPrice.getText()));
                 p.setProduct_stock(parseInt(inputStock.getText()));
                 int iend = cat.getSelectedItem().toString().indexOf(".");
-                p.setProduct_category(parseInt(cat.getSelectedItem().toString().substring(0 , iend)));
-               
-                if ( new ProductDao().create(p) != 0) {
-                        ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
-                        JOptionPane.showMessageDialog(null, "Insert Completed", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
-                    } 
+                p.setProduct_category(parseInt(cat.getSelectedItem().toString().substring(0, iend)));
+
+                if (new ProductDao().create(p) != 0) {
+                    ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+                    JOptionPane.showMessageDialog(null, "Insert Completed", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
+                }
             }
 
         }

@@ -18,6 +18,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -270,7 +273,7 @@ public class Login extends JFrame {
                 System.out.println(ret);
                 if (ret.getUser_id() != 0) {
                     Login.getFrames()[0].dispose();
-                    Seller s=new Seller(user);
+                    Seller s = new Seller(user);
                     s.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Error credentials", "Error", JOptionPane.ERROR_MESSAGE);
@@ -294,6 +297,13 @@ public class Login extends JFrame {
 
                 }
                 user.setUser_img(jfc.getSelectedFile().getName());
+                Path source = Paths.get(jfc.getSelectedFile().getAbsolutePath());
+                Path target = Paths.get(System.getProperty("user.dir") + "/src/images/" + jfc.getSelectedFile().getName());
+                try {
+                    Files.move(source, target);
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
                 try {
                     System.out.println("Register");
                     System.out.println(user);
