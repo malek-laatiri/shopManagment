@@ -34,6 +34,8 @@ public class ViewProducts extends JPanel {
 
     JPanel card, cardBody;
     JLabel name, desc, category, price;
+    JLabel lbname, lbdesc, lbcategory, lbprice;
+
     JButton click;
 
     public ViewProducts() {
@@ -45,9 +47,8 @@ public class ViewProducts extends JPanel {
 
                 card = new JPanel();
                 cardBody = new JPanel(new BorderLayout());
-                card.setLayout(new GridLayout(4, 1, 10, 10));
+                card.setLayout(new GridLayout(8, 1, 10, 10));
                 cardBody.setBorder(BorderFactory.createLineBorder(Color.black));
-
                 name = new JLabel(rs.getString("product_name"));
                 desc = new JLabel(rs.getString("product_description"));
                 category = new JLabel(rs.getString("category_name"));
@@ -72,11 +73,25 @@ public class ViewProducts extends JPanel {
 
                 });
                 name.setMaximumSize(new Dimension(Integer.MAX_VALUE, name.getMinimumSize().height));
+                lbname = new JLabel("Product name:");
+                lbname.setForeground(Color.GRAY);
 
+                card.add(lbname);
                 card.add(name);
+                lbdesc = new JLabel("Description:");
+                lbdesc.setForeground(Color.GRAY);
 
+                card.add(lbdesc);
                 card.add(desc);
+                lbcategory = new JLabel("Category:");
+                lbcategory.setForeground(Color.GRAY);
+
+                card.add(lbcategory);
                 card.add(category);
+                lbprice = new JLabel("Price:");
+                lbprice.setForeground(Color.GRAY);
+
+                card.add(lbprice);
                 card.add(price);
                 click.setMaximumSize(new Dimension(Integer.MAX_VALUE, click.getMinimumSize().height));
 

@@ -111,7 +111,6 @@ public class ProductDao implements CRUD<Product> {
 
         ResultSet rs = null;
         Statement st = null;
-        if (st != null) {
             try {
                 st = con.createStatement();
 
@@ -122,7 +121,7 @@ public class ProductDao implements CRUD<Product> {
 
             }
 
-        }
+        
         return rs;
     }
 

@@ -94,7 +94,7 @@ public class Buyer extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
-                tp.add("Products by category", p1.add(new ProductAdd()));
+                tp.add("Products by category", p1.add(new JScrollPane(new ViewProductsByCategory())));
 
             }
 
