@@ -6,13 +6,8 @@
 package shop;
 
 import Dao.DbDao;
-import Dao.UserDao;
-import Entity.User;
 import IHM.Login;
-import IHM.ProductAdd;
-import IHM.Seller;
 import java.sql.*;
-import javax.swing.JFrame;
 
 /**
  *

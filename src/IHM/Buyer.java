@@ -10,6 +10,8 @@ import Dao.ProductDao;
 import Entity.User;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -38,11 +40,11 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author malek
  */
-public class Seller extends JFrame {
+public class Buyer extends JFrame {
 
     JMenuBar barreMenu;
-    JMenu produit, category, profil;
-    JMenuItem addProd, addCategory, allProd, allCategory, viewProfile, updateProfile, disconnect;
+    JMenu products, currentOrder, history, profil;
+    JMenuItem allProducts, byCateg, confirm, viewProfile, updateProfile, disconnect, orders;
     JLabel lb_help, lb_help_content, lb_nom, lb_prenom, lb_pseudo, lb_star;
     JTextField f_nom, f_prenom, f_pseudo;
     JButton valider;
@@ -53,100 +55,107 @@ public class Seller extends JFrame {
     JTable jt;
     JScrollPane scr;
 
-    public Seller(User user) {
+    public Buyer(User user) {
         barreMenu = new JMenuBar();
-        produit = new JMenu("Products");
-        addProd = new JMenuItem("Add product");
-        addProd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                JPanel p1 = new JPanel();
-                p1.setLayout(new FlowLayout());
-                tp.add("Add prod", p1.add(new ProductAdd()));
-
-            }
-
-        });
-        allProd = new JMenuItem("All products");
-        allProd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ModelProduct model = new ModelProduct(new ProductDao().read());
-                jt = new JTable(model);
-                jt.setRowHeight(200);
-
-                jt.addMouseListener(new Ecouteur());
-                scr = new JScrollPane(jt);//!!!!!
-                JPanel p1 = new JPanel();
-                p1.setLayout(new FlowLayout());
-                tp.add("All products", p1.add(scr));
-
-            }
-
-        });
-        produit.add(addProd);
-        produit.add(allProd);
-
-        category = new JMenu("Categories");
-        addCategory = new JMenuItem("Add category");
-        allCategory = new JMenuItem("All categories");
-        category.add(addCategory);
-          addCategory.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                JPanel p1 = new JPanel();
-                p1.setLayout(new FlowLayout());
-                tp.add("Add Category", p1.add(new CategoryAdd()));
-
-            }
-
-        });
-            allCategory.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ModelCategory model = new ModelCategory(new CategoryDao().read());
-                jt = new JTable(model);
-                jt.addMouseListener(new Ecouteur());
-                scr = new JScrollPane(jt);//!!!!!
-                JPanel p1 = new JPanel();
-                p1.setLayout(new FlowLayout());
-                tp.add("All categories", p1.add(scr));
-
-            }
-
-        });
-        category.add(allCategory);
-
-        profil = new JMenu("profil");
-        viewProfile = new JMenuItem("View Profile");
-         viewProfile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-               
-                JPanel p1 = new JPanel();
-                p1.setLayout(new FlowLayout());
-                tp.add("View profile", p1.add(new ViewProfile(user)));
-
-            }
-
-        });
+        products = new JMenu("Products");
+        currentOrder = new JMenu("Orders");
+        history = new JMenu("History");
+        profil = new JMenu("Profil");
+        allProducts = new JMenuItem("All product");
+        byCateg = new JMenuItem("Products by Category");
+        confirm = new JMenuItem("Confirm Order");
+        viewProfile = new JMenuItem("My profile");
         updateProfile = new JMenuItem("Update profile");
-        disconnect = new JMenuItem("disconnect");
+        orders = new JMenuItem("All Orders");
+                disconnect = new JMenuItem("Disconnect");
+
+        products.add(allProducts);
+        products.add(byCateg);
+        currentOrder.add(confirm);
+        history.add(orders);
         profil.add(viewProfile);
         profil.add(updateProfile);
         profil.addSeparator();
         profil.add(disconnect);
-        disconnect.addActionListener(new ActionListener() {
+
+        allProducts.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                 Seller.getFrames()[0].dispose();
-         new Login().setVisible(true);
+                JPanel p1 = new JPanel();
+                p1.setLayout(new FlowLayout());
+                tp.add("All products", p1.add(new JScrollPane(new ViewProducts())));
 
             }
 
         });
-        barreMenu.add(produit);
-        barreMenu.add(category);
+
+        byCateg.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                JPanel p1 = new JPanel();
+                p1.setLayout(new FlowLayout());
+                tp.add("Products by category", p1.add(new ProductAdd()));
+
+            }
+
+        });
+
+        confirm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                JPanel p1 = new JPanel();
+                p1.setLayout(new FlowLayout());
+                tp.add("Confirm order", p1.add(new ProductAdd()));
+
+            }
+
+        });
+
+        viewProfile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                JPanel p1 = new JPanel();
+                p1.setLayout(new FlowLayout());
+                tp.add("My profile", p1.add(new ProductAdd()));
+
+            }
+
+        });
+
+        updateProfile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                JPanel p1 = new JPanel();
+                p1.setLayout(new FlowLayout());
+                tp.add("Update profile", p1.add(new ProductAdd()));
+
+            }
+
+        });
+
+        orders.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                JPanel p1 = new JPanel();
+                p1.setLayout(new FlowLayout());
+                tp.add("All orders", p1.add(new ProductAdd()));
+
+            }
+
+        });
+        disconnect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                Seller.getFrames()[0].dispose();
+                new Login().setVisible(true);
+
+            }
+
+        });
+
+        barreMenu.add(products);
+        barreMenu.add(currentOrder);
+        barreMenu.add(history);
         barreMenu.add(profil);
         /**
          * *********CENTER********
@@ -196,7 +205,7 @@ public class Seller extends JFrame {
         big.add("Center", splitPane);
 
         this.setJMenuBar(barreMenu);
-        this.setTitle("Seller");
+        this.setTitle("Buyer");
         this.setContentPane(big);
         this.setSize(1000, 800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
