@@ -45,7 +45,7 @@ public class Login extends JFrame {
     JPasswordField f_pass, f_reg_pass;
     JTextField f_username, f_reg_username, f_reg_email, f_reg_phone;
     JButton login, register, upload;
-    JPanel diff, big;
+    JPanel diff, big, username, email, password, phone, role, image, submit;
     JRadioButton rbBuyer, rbSeller;
     ButtonGroup group;
     JFileChooser jfc;
@@ -79,47 +79,60 @@ public class Login extends JFrame {
         big.add("North", pano);
 
         diff = new JPanel();
-        diff.setLayout(new GridLayout(7, 2, 10, 10));
+        diff.setLayout(new GridLayout(7,0,10,10));
         diff.setBorder(BorderFactory.createTitledBorder("Register"));
+
+        JPanel username = new JPanel();
+        username.setLayout(new FlowLayout());
 
         lb_reg_username = new JLabel("Username");
         lb_reg_username.addMouseListener(new Ecouteur());
-        diff.add(lb_reg_username);
+        username.add(lb_reg_username);
 
         f_reg_username = new JTextField(10);
         f_reg_username.addMouseListener(new Ecouteur());
-        diff.add(f_reg_username);
+        username.add(f_reg_username);
 
+        diff.add(username);
+
+        JPanel email = new JPanel();
+        email.setLayout(new FlowLayout());
         lb_reg_email = new JLabel("Email");
         lb_reg_email.addMouseListener(new Ecouteur());
-        diff.add(lb_reg_email);
+        email.add(lb_reg_email);
 
         f_reg_email = new JTextField(10);
         f_reg_email.addMouseListener(new Ecouteur());
         f_reg_email.addFocusListener(new Ecouteur());
-        diff.add(f_reg_email);
-
+        email.add(f_reg_email);
+        diff.add(email);
+        JPanel password = new JPanel();
+        password.setLayout(new FlowLayout());
         lb_reg_password = new JLabel("Password");
         lb_reg_password.addMouseListener(new Ecouteur());
-        diff.add(lb_reg_password);
+        password.add(lb_reg_password);
 
         f_reg_pass = new JPasswordField(10);
         f_reg_pass.addMouseListener(new Ecouteur());
         f_reg_pass.addFocusListener(new Ecouteur());
-        diff.add(f_reg_pass);
-
+        password.add(f_reg_pass);
+        diff.add(password);
+        JPanel phone = new JPanel();
+        phone.setLayout(new FlowLayout());
         lb_reg_phone = new JLabel("Phone");
-        diff.add(lb_reg_phone);
+        phone.add(lb_reg_phone);
         lb_reg_phone.addMouseListener(new Ecouteur());
 
         f_reg_phone = new JTextField(10);
         f_reg_phone.addFocusListener(new Ecouteur());
         f_reg_phone.addMouseListener(new Ecouteur());
 
-        diff.add(f_reg_phone);
-
+        phone.add(f_reg_phone);
+        diff.add(phone);
+        JPanel role = new JPanel();
+        role.setLayout(new FlowLayout());
         lb_reg_role = new JLabel("Role");
-        diff.add(lb_reg_role);
+        role.add(lb_reg_role);
         lb_reg_role.addMouseListener(new Ecouteur());
 
         JPanel panS = new JPanel();
@@ -134,19 +147,24 @@ public class Login extends JFrame {
         group.add(rbBuyer);
         group.add(rbSeller);
 
-        diff.add(panS);
+        role.add(panS);
+        diff.add(role);
+        JPanel image = new JPanel();
+        image.setLayout(new FlowLayout());
         lb_reg_img = new JLabel("Image");
         lb_reg_img.addMouseListener(new Ecouteur());
 
-        diff.add(lb_reg_img);
+        image.add(lb_reg_img);
         upload = new JButton("image");
         upload.addActionListener(new Ecouteur());
-        diff.add(upload);
-
+        image.add(upload);
+        diff.add(image);
+        JPanel submit = new JPanel();
+        submit.setLayout(new FlowLayout());
         register = new JButton("register");
         register.addActionListener(new Ecouteur());
-
-        diff.add(register);
+        submit.add(register);
+        diff.add(submit);
         big.add("Center", diff);
 
         JPanel help = new JPanel();
@@ -260,6 +278,8 @@ public class Login extends JFrame {
             if (e.getSource() == upload) {
                 jfc = new JFileChooser("/");
                 jfc.showOpenDialog(Login.this);
+                  ImageIcon img = new ImageIcon(jfc.getSelectedFile().getAbsolutePath());
+lb_reg_img.setIcon(img);
             }
             if (e.getSource() == login) {
 
@@ -274,10 +294,12 @@ public class Login extends JFrame {
                 if (ret.getUser_id() != 0) {
                     Login.getFrames()[0].dispose();
                     if (ret.getUser_type().equals("ROLE_SELLER")) {
-                        Seller s = new Seller(user);
+                        dispose();
+                        Seller s = new Seller(ret);
                         s.setVisible(true);
                     } else {
-                        Buyer s = new Buyer(user);
+                        dispose();
+                        Buyer s = new Buyer(ret);
                         s.setVisible(true);
 
                     }
@@ -306,6 +328,7 @@ public class Login extends JFrame {
                 user.setUser_img(jfc.getSelectedFile().getName());
                 Path source = Paths.get(jfc.getSelectedFile().getAbsolutePath());
                 Path target = Paths.get(System.getProperty("user.dir") + "/src/images/" + jfc.getSelectedFile().getName());
+                      
                 try {
                     Files.move(source, target);
                 } catch (Exception ex) {

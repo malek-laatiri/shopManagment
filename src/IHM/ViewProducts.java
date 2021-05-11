@@ -5,7 +5,10 @@
  */
 package IHM;
 
+import Dao.CartDao;
 import Dao.ProductDao;
+import Entity.Cart;
+import Entity.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,7 +41,7 @@ public class ViewProducts extends JPanel {
 
     JButton click;
 
-    public ViewProducts() {
+    public ViewProducts(User user) {
         this.setLayout(new FlowLayout());
         this.setBorder(BorderFactory.createTitledBorder("All products"));
         try {
@@ -65,6 +68,12 @@ public class ViewProducts extends JPanel {
                             String s = ((JButton) ae.getSource()).getText();
                             int iend = s.indexOf(".");
                             System.out.println(parseInt(s.substring(0, iend)));
+                            Cart cart=new Cart();
+                            cart.setProduct_id(parseInt(s.substring(0, iend)));
+                            cart.setQuantity(1);
+                            System.out.println(user.getUser_id());
+                            cart.setUser_id(user.getUser_id());
+                            new CartDao().create(cart);
                         } catch (Exception ex) {
                             ex.getMessage();
                         }

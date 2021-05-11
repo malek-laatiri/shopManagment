@@ -10,33 +10,42 @@ package Entity;
  * @author malek
  */
 public class Cart {
-  private int review_id ;
-   private String review_content ;
-   private String review_created_at;
+  private int user_id ;
+    private int product_id ;
+  private int quantity ;
+  private int orders_id ;
 
-    public int getReview_id() {
-        return review_id;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setReview_id(int review_id) {
-        this.review_id = review_id;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
-    public String getReview_content() {
-        return review_content;
+    public int getProduct_id() {
+        return product_id;
     }
 
-    public void setReview_content(String review_content) {
-        this.review_content = review_content;
+    public void setProduct_id(int product_id) {
+        this.product_id = product_id;
     }
 
-    public String getReview_created_at() {
-        return review_created_at;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setReview_created_at(String review_created_at) {
-        this.review_created_at = review_created_at;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
-   
+
+    public int getOrders_id() {
+        return orders_id;
+    }
+
+    public void setOrders_id(int orders_id) {
+        this.orders_id = orders_id;
+    }
+
    
 }

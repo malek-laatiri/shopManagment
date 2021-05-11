@@ -5,9 +5,12 @@
  */
 package IHM;
 
+import Dao.CartDao;
 import Dao.CategoryDao;
 import Dao.ProductDao;
+import Entity.Cart;
 import Entity.Category;
+import Entity.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -44,7 +47,7 @@ public class ViewProductsByCategory extends JPanel {
 
     JButton click;
 
-    public ViewProductsByCategory() {
+    public ViewProductsByCategory(User user) {
         form = new JPanel();
         form.setLayout(new FlowLayout());
         form.setBorder(BorderFactory.createTitledBorder("Select category"));
@@ -90,20 +93,26 @@ public class ViewProductsByCategory extends JPanel {
                         Image newimg = image.getScaledInstance(200, 400, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
                         img = new ImageIcon(newimg);  // transform it back
                         click = new JButton(String.valueOf(rs.getInt("product_id")) + ".Add to cart");
-                        click.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent ae) {
-                                try {
-                                    String s = ((JButton) ae.getSource()).getText();
-                                    int iend = s.indexOf(".");
-                                    System.out.println(parseInt(s.substring(0, iend)));
-                                } catch (Exception ex) {
-                                    ex.getMessage();
-                                }
+                            click.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        try {
+                            String s = ((JButton) ae.getSource()).getText();
+                            int iend = s.indexOf(".");
+                            System.out.println(parseInt(s.substring(0, iend)));
+                            Cart cart=new Cart();
+                            cart.setProduct_id(parseInt(s.substring(0, iend)));
+                            cart.setQuantity(1);
+                            System.out.println(user.getUser_id());
+                            cart.setUser_id(user.getUser_id());
+                            new CartDao().create(cart);
+                        } catch (Exception ex) {
+                            ex.getMessage();
+                        }
 
-                            }
+                    }
 
-                        });
+                });
                         name.setMaximumSize(new Dimension(Integer.MAX_VALUE, name.getMinimumSize().height));
                         lbname = new JLabel("Product name:");
                         lbname.setForeground(Color.GRAY);

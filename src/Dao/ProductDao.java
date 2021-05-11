@@ -95,7 +95,7 @@ public class ProductDao implements CRUD<Product> {
             try {
                 st = con.createStatement();
 
-                rs = st.executeQuery("select product_id,product_name,product_description,product_category,product_stock,product_price,product_img,category_name from product,category where product.product_category=category.category_id");
+                rs = st.executeQuery("select product_id,product_name,product_description,product_stock,product_price,product_img,category_name from product,category where product.product_category=category.category_id");
                 return rs;
             } catch (Exception e) {
                 System.out.println(e.getMessage());

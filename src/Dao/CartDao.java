@@ -17,7 +17,7 @@ import java.sql.*;
 public class CartDao implements CRUD<Cart> {
 
     Connection con = null;
-    Statement st=null;
+    Statement st = null;
 
     @Override
     public int create(Cart object) {
@@ -27,7 +27,7 @@ public class CartDao implements CRUD<Cart> {
             try {
                 st = con.createStatement();
                 //creer des requetes
-                res = st.executeUpdate("insert into personne values (" + num + ",'" + nom + "','" + prenom + "'," + moy + ")");
+                res = st.executeUpdate("insert into cart(user_id,product_id,quantity) values (" + object.getUser_id() + ",'" + object.getProduct_id() + "','" + object.getQuantity() + "')");
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -42,11 +42,10 @@ public class CartDao implements CRUD<Cart> {
         int res = 0;
         if (con != null) {
             try {
-                st = con.createStatement();
 
                 st = con.createStatement();
                 //creer des requetes
-                res = st.executeUpdate("delete from personne where numero=" + num);
+                res = st.executeUpdate("delete from personne where numero=" + id);
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -63,7 +62,7 @@ public class CartDao implements CRUD<Cart> {
             try {
                 st = con.createStatement();
                 //creer des requetes
-                res = st.executeUpdate("update personne set nom='" + nom + "',prenom='" + prenom + "',moyenne='" + moy + "' where numero=" + num);
+                //res = st.executeUpdate("update personne set nom='" + nom + "',prenom='" + prenom + "',moyenne='" + moy + "' where numero=" + num);
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -78,24 +77,26 @@ public class CartDao implements CRUD<Cart> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public ResultSet read() {
+    public ResultSet readAll(int user_id) {
         ResultSet rs = null;
+        Connection con = DbDao.getConnection();
 
-        if (st != null) {
-            try {
-                st = con.createStatement();
+        try {
+            st = con.createStatement();
 
-                rs = st.executeQuery("select * from personne");
-                System.out.println("done getAllPersonne");
-                return rs;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-
-            }
+            rs = st.executeQuery("select * from cart where user_id=" + user_id);
+            return rs;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
 
         }
+
         return rs;
+    }
+
+    @Override
+    public ResultSet read() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
