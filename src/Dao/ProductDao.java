@@ -9,6 +9,7 @@ import Entity.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
@@ -124,5 +125,22 @@ public class ProductDao implements CRUD<Product> {
         
         return rs;
     }
+public int decrement(int quantity,int product_id){
+     Connection con = DbDao.getConnection();
 
+        int rs = 0;
+        Statement st = null;
+            try {
+                st = con.createStatement();
+
+                rs = st.executeUpdate("UPDATE product SET product_stock = product_stock - "+quantity+"  where product_id=" + product_id);
+                return rs;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+
+            }
+
+        
+        return rs;
+}
 }

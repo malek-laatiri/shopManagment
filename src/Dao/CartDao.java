@@ -58,13 +58,14 @@ public class CartDao implements CRUD<Cart> {
     @Override
     public int update(Cart object) {
         int res = 0;
+        Connection con = DbDao.getConnection();
+
         if (con != null) {
             try {
                 st = con.createStatement();
-                //creer des requetes
-                //res = st.executeUpdate("update personne set nom='" + nom + "',prenom='" + prenom + "',moyenne='" + moy + "' where numero=" + num);
+                res = st.executeUpdate("update cart set quantity='" + object.getQuantity() + "' where cart_id=" + object.getCart_id());
 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());
 
             }
@@ -84,7 +85,7 @@ public class CartDao implements CRUD<Cart> {
         try {
             st = con.createStatement();
 
-            rs = st.executeQuery("select * from cart where user_id=" + user_id);
+            rs = st.executeQuery("select p.product_id,cart_id,quantity,product_price,product_img from cart c,product p where c.product_id=p.product_id and user_id=" + user_id);
             return rs;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -97,6 +98,23 @@ public class CartDao implements CRUD<Cart> {
     @Override
     public ResultSet read() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public int updateOrder(int cart_id, int order_id) {
+        int res = 0;
+        Connection con = DbDao.getConnection();
+
+        if (con != null) {
+            try {
+                st = con.createStatement();
+                res = st.executeUpdate("update cart set orders_id='" + order_id + "' where cart_id=" + cart_id);
+
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+
+            }
+        }
+        return res;
     }
 
 }

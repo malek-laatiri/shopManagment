@@ -5,18 +5,44 @@
  */
 package Dao;
 
+import Entity.Order;
+import com.mysql.jdbc.PreparedStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
  *
  * @author malek
  */
-public class OrderDao implements CRUD<OrderDao>{
+public class OrderDao implements CRUD<Order> {
+
+    Connection con = null;
+    Statement st = null;
 
     @Override
-    public int create(OrderDao object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int create(Order object) {
+        Connection con = DbDao.getConnection();
+        int res = 0;
+        long generatedKeys = 0;
+        if (con != null) {
+            try {
+                PreparedStatement ps = (PreparedStatement) con.prepareStatement("insert into orders(user_id) values (" + object.getUser_id() + ")", Statement.RETURN_GENERATED_KEYS);
+                //creer des requetes
+                res = ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+
+                if (rs.next()) {
+                    generatedKeys = rs.getLong(1);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+
+            }
+        }
+        return (int) generatedKeys;
     }
 
     @Override
@@ -25,12 +51,12 @@ public class OrderDao implements CRUD<OrderDao>{
     }
 
     @Override
-    public int update(OrderDao object) {
+    public int update(Order object) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public OrderDao readById(int id) {
+    public Order readById(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -39,5 +65,4 @@ public class OrderDao implements CRUD<OrderDao>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
 }

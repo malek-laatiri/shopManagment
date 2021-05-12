@@ -6,16 +6,12 @@
 package IHM;
 
 import Dao.CartDao;
-import Dao.CategoryDao;
-import Dao.ProductDao;
 import Entity.User;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -71,7 +67,7 @@ public class Buyer extends JFrame {
         viewProfile = new JMenuItem("My profile");
         updateProfile = new JMenuItem("Update profile");
         orders = new JMenuItem("All Orders");
-                disconnect = new JMenuItem("Disconnect");
+        disconnect = new JMenuItem("Disconnect");
 
         products.add(allProducts);
         products.add(byCateg);
@@ -88,7 +84,42 @@ public class Buyer extends JFrame {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
                 tp.add("All products", p1.add(new JScrollPane(new ViewProducts(user))));
+                ////
+                String titleTab = "All products";
+                int index = tp.indexOfTab(titleTab);
+                JPanel pnlTab = new JPanel(new GridBagLayout());
+                pnlTab.setOpaque(false);
+                JLabel lblTitle = new JLabel(titleTab);
+                JButton btnClose = new JButton("x");
 
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+
+                pnlTab.add(lblTitle, gbc);
+
+                gbc.gridx++;
+                gbc.weightx = 0;
+                pnlTab.add(btnClose, gbc);
+
+                tp.setTabComponentAt(index, pnlTab);
+
+                btnClose.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+
+                        Component selected = tp.getSelectedComponent();
+                        if (selected != null) {
+
+                            tp.remove(selected);
+                            // It would probably be worthwhile getting the source
+                            // casting it back to a JButton and removing
+                            // the action handler reference ;)
+
+                        }
+
+                    }
+                });
             }
 
         });
@@ -99,14 +130,48 @@ public class Buyer extends JFrame {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
                 tp.add("Products by category", p1.add(new JScrollPane(new ViewProductsByCategory(user))));
+                ////
+                String titleTab = "Products by category";
+                int index = tp.indexOfTab(titleTab);
+                JPanel pnlTab = new JPanel(new GridBagLayout());
+                pnlTab.setOpaque(false);
+                JLabel lblTitle = new JLabel(titleTab);
+                JButton btnClose = new JButton("x");
+
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+
+                pnlTab.add(lblTitle, gbc);
+
+                gbc.gridx++;
+                gbc.weightx = 0;
+                pnlTab.add(btnClose, gbc);
+
+                tp.setTabComponentAt(index, pnlTab);
+
+                btnClose.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+
+                        Component selected = tp.getSelectedComponent();
+                        if (selected != null) {
+
+                            tp.remove(selected);
+                            // It would probably be worthwhile getting the source
+                            // casting it back to a JButton and removing
+                            // the action handler reference ;)
+
+                        }
+
+                    }
+                });
 
             }
 
         });
 
-      
-
-          confirm.addActionListener(new ActionListener() {
+        confirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 JPanel p1 = new JPanel();
@@ -119,9 +184,8 @@ public class Buyer extends JFrame {
 
                 //jt.addMouseListener(new Seller.Ecouteur());
                 scr = new JScrollPane(jt);//!!!!!
-               
 
-                tp.add(titleTab, p1.add(scr));
+                tp.add(titleTab,new ConfirmOrder(user));
                 ////
                 int index = tp.indexOfTab(titleTab);
                 JPanel pnlTab = new JPanel(new GridBagLayout());
@@ -161,14 +225,49 @@ public class Buyer extends JFrame {
             }
 
         });
-        
-        
+
         viewProfile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
                 tp.add("My profile", p1.add(new ProductAdd()));
+                ////
+                String titleTab = "My profile";
+                int index = tp.indexOfTab(titleTab);
+                JPanel pnlTab = new JPanel(new GridBagLayout());
+                pnlTab.setOpaque(false);
+                JLabel lblTitle = new JLabel(titleTab);
+                JButton btnClose = new JButton("x");
+
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+
+                pnlTab.add(lblTitle, gbc);
+
+                gbc.gridx++;
+                gbc.weightx = 0;
+                pnlTab.add(btnClose, gbc);
+
+                tp.setTabComponentAt(index, pnlTab);
+
+                btnClose.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+
+                        Component selected = tp.getSelectedComponent();
+                        if (selected != null) {
+
+                            tp.remove(selected);
+                            // It would probably be worthwhile getting the source
+                            // casting it back to a JButton and removing
+                            // the action handler reference ;)
+
+                        }
+
+                    }
+                });
 
             }
 
@@ -180,6 +279,42 @@ public class Buyer extends JFrame {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
                 tp.add("Update profile", p1.add(new ProductAdd()));
+                ////
+                String titleTab = "Update profile";
+                int index = tp.indexOfTab(titleTab);
+                JPanel pnlTab = new JPanel(new GridBagLayout());
+                pnlTab.setOpaque(false);
+                JLabel lblTitle = new JLabel(titleTab);
+                JButton btnClose = new JButton("x");
+
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+
+                pnlTab.add(lblTitle, gbc);
+
+                gbc.gridx++;
+                gbc.weightx = 0;
+                pnlTab.add(btnClose, gbc);
+
+                tp.setTabComponentAt(index, pnlTab);
+
+                btnClose.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+
+                        Component selected = tp.getSelectedComponent();
+                        if (selected != null) {
+
+                            tp.remove(selected);
+                            // It would probably be worthwhile getting the source
+                            // casting it back to a JButton and removing
+                            // the action handler reference ;)
+
+                        }
+
+                    }
+                });
 
             }
 
@@ -191,6 +326,42 @@ public class Buyer extends JFrame {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
                 tp.add("All orders", p1.add(new ProductAdd()));
+                ////
+                String titleTab = "Products by category";
+                int index = tp.indexOfTab(titleTab);
+                JPanel pnlTab = new JPanel(new GridBagLayout());
+                pnlTab.setOpaque(false);
+                JLabel lblTitle = new JLabel(titleTab);
+                JButton btnClose = new JButton("All orders");
+
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 1;
+
+                pnlTab.add(lblTitle, gbc);
+
+                gbc.gridx++;
+                gbc.weightx = 0;
+                pnlTab.add(btnClose, gbc);
+
+                tp.setTabComponentAt(index, pnlTab);
+
+                btnClose.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+
+                        Component selected = tp.getSelectedComponent();
+                        if (selected != null) {
+
+                            tp.remove(selected);
+                            // It would probably be worthwhile getting the source
+                            // casting it back to a JButton and removing
+                            // the action handler reference ;)
+
+                        }
+
+                    }
+                });
 
             }
 
@@ -198,7 +369,7 @@ public class Buyer extends JFrame {
         disconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-               dispose();
+                dispose();
                 new Login().setVisible(true);
 
             }

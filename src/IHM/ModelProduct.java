@@ -47,7 +47,6 @@ public class ModelProduct extends AbstractTableModel {
                         ligne[i] = img;
                         super.setValueAt(img, nbligne, i);
 
-                        //ligne[i] = new ImageIcon("/home/malek/NetBeansProjects/shop/src/images/fixed.jpg");
                     } else {
                         ligne[i] = rs.getObject(i + 1);
 

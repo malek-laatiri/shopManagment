@@ -5,13 +5,17 @@
  */
 package IHM;
 
+import Dao.CartDao;
 import Dao.CategoryDao;
+import Entity.Cart;
+import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.table.AbstractTableModel;
 import java.sql.*;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -34,13 +38,24 @@ public class ModelCart extends AbstractTableModel {
                 nbligne++;
                 Object[] ligne = new Object[rsmd.getColumnCount()];
                 for (int i = 0; i < ligne.length; i++) {
-                    ligne[i] = rs.getObject(i + 1);
+                    if (i == 4) {
+                        ImageIcon img = new ImageIcon(System.getProperty("user.dir") + "/src/images/" + rs.getObject(i + 1));
+                        Image image = img.getImage(); // transform it 
+                        Image newimg = image.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+                        img = new ImageIcon(newimg);  // transform it back
+                        ligne[i] = img;
+                        super.setValueAt(img, nbligne, i);
+
+                    } else {
+                        ligne[i] = rs.getObject(i + 1);
+
+                    }
                 }
                 data.add(ligne);
 
             }
-            
-        } catch (Exception ex) {
+
+        } catch (SQLException ex) {
             ex.getMessage();
         }
     }
@@ -61,7 +76,7 @@ public class ModelCart extends AbstractTableModel {
         try {
             return new Object[rsmd.getColumnCount()].length;
         } catch (SQLException ex) {
-           ex.getMessage();
+            ex.getMessage();
         }
         return 0;
     }
@@ -75,13 +90,17 @@ public class ModelCart extends AbstractTableModel {
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         data.get(rowIndex)[columnIndex] = aValue;
         Object[] p = data.get(rowIndex);
-        //PersonneManager pm = new PersonneManager();
-        // pm.update(p[nameToIndice("numero")], p[nameToIndice("nom")], p[nameToIndice("prenom")], p[nameToIndice("moyenne")]);
+        data.get(rowIndex)[columnIndex] = aValue;
+        CartDao pm = new CartDao();
+        Cart cart = new Cart();
+        cart.setCart_id(Integer.parseInt(p[nameToIndice("cart_id")].toString()));
+        cart.setQuantity(Integer.parseInt(p[nameToIndice("quantity")].toString()));
+        pm.update(cart);
     }
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        if (getColumnName(columnIndex).equals("product_stock")) {
+        if (getColumnName(columnIndex).equals("quantity")) {
             return true;
         } else {
             return false;
@@ -92,7 +111,7 @@ public class ModelCart extends AbstractTableModel {
     public String getColumnName(int column) {
         try {
             return rsmd.getColumnName(column + 1);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.getMessage();
         }
         return "0";

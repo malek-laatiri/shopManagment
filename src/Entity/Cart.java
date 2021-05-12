@@ -15,6 +15,26 @@ public class Cart {
   private int quantity ;
   private int orders_id ;
 
+    private int cart_id;
+
+    /**
+     * Get the value of cart_id
+     *
+     * @return the value of cart_id
+     */
+    public int getCart_id() {
+        return cart_id;
+    }
+
+    /**
+     * Set the value of cart_id
+     *
+     * @param cart_id new value of cart_id
+     */
+    public void setCart_id(int cart_id) {
+        this.cart_id = cart_id;
+    }
+
     public int getUser_id() {
         return user_id;
     }
@@ -45,6 +65,11 @@ public class Cart {
 
     public void setOrders_id(int orders_id) {
         this.orders_id = orders_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" + "user_id=" + user_id + ", product_id=" + product_id + ", quantity=" + quantity + ", orders_id=" + orders_id + '}';
     }
 
    
