@@ -13,8 +13,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.lang.Integer.parseInt;
@@ -28,6 +30,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -35,27 +38,49 @@ import javax.swing.JPanel;
  */
 public class ViewProducts extends JPanel {
 
-    JPanel card, cardBody;
+    JPanel card, cardBody, content;
     JLabel name, desc, category, price;
     JLabel lbname, lbdesc, lbcategory, lbprice;
 
     JButton click;
+    JLabel header;
 
     public ViewProducts(User user) {
-        this.setLayout(new FlowLayout());
+        this.setLayout(new BorderLayout());
+        /**
+         * *******HEADER*****
+         */
+        header = new JLabel("All Products");
+        header.setForeground(Color.decode("#ffa600"));
+        header.setBackground(Color.decode("#003f5c"));
+        header.setOpaque(true);
+        header.setHorizontalAlignment(JLabel.CENTER);
+        header.setFont(new Font("Serif", Font.PLAIN, 36));
+        header.setPreferredSize(new Dimension(400, 200));
+        this.add("North", header);
+        /**
+         * *************
+         */
+        content = new JPanel();
+        content.setLayout(new FlowLayout());
         this.setBorder(BorderFactory.createTitledBorder("All products"));
         try {
             ResultSet rs = new ProductDao().read();
             while (rs.next()) {
 
                 card = new JPanel();
+                card.setBackground(Color.WHITE);
                 cardBody = new JPanel(new BorderLayout());
                 card.setLayout(new GridLayout(8, 1, 10, 10));
                 cardBody.setBorder(BorderFactory.createLineBorder(Color.black));
                 name = new JLabel(rs.getString("product_name"));
+                name.setFont(new Font("Serif", Font.PLAIN, 20));
                 desc = new JLabel(rs.getString("product_description"));
+                desc.setFont(new Font("Serif", Font.PLAIN, 20));
                 category = new JLabel(rs.getString("category_name"));
-                price = new JLabel(String.valueOf(rs.getDouble("product_price")));
+                category.setFont(new Font("Serif", Font.PLAIN, 20));
+                price = new JLabel(String.valueOf(rs.getDouble("product_price"))+"$");
+                price.setFont(new Font("Serif", Font.PLAIN, 20));
                 ImageIcon img = new ImageIcon(System.getProperty("user.dir") + "/src/images/" + rs.getString("product_img"));
                 Image image = img.getImage(); // transform it 
                 Image newimg = image.getScaledInstance(200, 400, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
@@ -68,7 +93,7 @@ public class ViewProducts extends JPanel {
                             String s = ((JButton) ae.getSource()).getText();
                             int iend = s.indexOf(".");
                             System.out.println(parseInt(s.substring(0, iend)));
-                            Cart cart=new Cart();
+                            Cart cart = new Cart();
                             cart.setProduct_id(parseInt(s.substring(0, iend)));
                             cart.setQuantity(1);
                             System.out.println(user.getUser_id());
@@ -84,21 +109,25 @@ public class ViewProducts extends JPanel {
                 name.setMaximumSize(new Dimension(Integer.MAX_VALUE, name.getMinimumSize().height));
                 lbname = new JLabel("Product name:");
                 lbname.setForeground(Color.GRAY);
+                lbname.setFont(new Font("Serif", Font.BOLD, 20));
 
                 card.add(lbname);
                 card.add(name);
                 lbdesc = new JLabel("Description:");
                 lbdesc.setForeground(Color.GRAY);
+                lbdesc.setFont(new Font("Serif", Font.BOLD, 20));
 
                 card.add(lbdesc);
                 card.add(desc);
                 lbcategory = new JLabel("Category:");
                 lbcategory.setForeground(Color.GRAY);
+                lbcategory.setFont(new Font("Serif", Font.BOLD, 20));
 
                 card.add(lbcategory);
                 card.add(category);
                 lbprice = new JLabel("Price:");
                 lbprice.setForeground(Color.GRAY);
+                lbprice.setFont(new Font("Serif", Font.BOLD, 20));
 
                 card.add(lbprice);
                 card.add(price);
@@ -109,13 +138,14 @@ public class ViewProducts extends JPanel {
                 cardBody.add(card, BorderLayout.CENTER);
 
                 cardBody.add(new JLabel(img), BorderLayout.WEST);
-                this.add(cardBody);
+                content.add(cardBody);
 
             }
 
         } catch (SQLException e) {
             e.getMessage();
         }
+        this.add(new JScrollPane(content), BorderLayout.CENTER);
 
     }
 

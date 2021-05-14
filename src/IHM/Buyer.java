@@ -33,6 +33,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -42,6 +43,9 @@ import javax.swing.event.ListSelectionListener;
  */
 public class Buyer extends JFrame {
 
+    boolean isChanging = false;
+
+    JPopupMenu popupmenu;
     JMenuBar barreMenu;
     JMenu products, currentOrder, history, profil;
     JMenuItem allProducts, byCateg, confirm, viewProfile, updateProfile, disconnect, orders;
@@ -54,6 +58,9 @@ public class Buyer extends JFrame {
     JTabbedPane tp;
     JTable jt;
     JScrollPane scr;
+    JList myList;
+    String row = "";
+    int index = 0;
 
     public Buyer(User user) {
         barreMenu = new JMenuBar();
@@ -83,7 +90,7 @@ public class Buyer extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
-                tp.add("All products", p1.add(new JScrollPane(new ViewProducts(user))));
+                tp.add("All products", p1.add(new ViewProducts(user)));
                 ////
                 String titleTab = "All products";
                 int index = tp.indexOfTab(titleTab);
@@ -185,7 +192,7 @@ public class Buyer extends JFrame {
                 //jt.addMouseListener(new Seller.Ecouteur());
                 scr = new JScrollPane(jt);//!!!!!
 
-                tp.add(titleTab,new ConfirmOrder(user));
+                tp.add(titleTab, new ConfirmOrder(user));
                 ////
                 int index = tp.indexOfTab(titleTab);
                 JPanel pnlTab = new JPanel(new GridBagLayout());
@@ -231,7 +238,7 @@ public class Buyer extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
-                tp.add("My profile", p1.add(new ProductAdd()));
+                tp.add("My profile", p1.add(new ViewProfile(user)));
                 ////
                 String titleTab = "My profile";
                 int index = tp.indexOfTab(titleTab);
@@ -327,12 +334,12 @@ public class Buyer extends JFrame {
                 p1.setLayout(new FlowLayout());
                 tp.add("All orders", p1.add(new ProductAdd()));
                 ////
-                String titleTab = "Products by category";
+                String titleTab = "All orders";
                 int index = tp.indexOfTab(titleTab);
                 JPanel pnlTab = new JPanel(new GridBagLayout());
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
-                JButton btnClose = new JButton("All orders");
+                JButton btnClose = new JButton("X");
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -386,37 +393,19 @@ public class Buyer extends JFrame {
         big = new JPanel();
         big.setLayout(new BorderLayout());
         data = new DefaultListModel();
-        JList myList = new JList(data);
-        myList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent lse) {
-                final JPopupMenu popupmenu = new JPopupMenu("Edit");
-                JMenuItem cut = new JMenuItem("Supprimer");
-                JMenuItem copy = new JMenuItem("Supprimer tous");
-                JMenuItem paste = new JMenuItem("Renommer");
-                popupmenu.add(cut);
-                popupmenu.add(copy);
-                popupmenu.add(paste);
-                myList.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        popupmenu.show(myList, e.getX(), e.getY());
-                        System.out.println(e.getSource());
-                    }
-                });
-            }
-        });
-        myList.addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseMoved(MouseEvent e) {
-                JList l = (JList) e.getSource();
-                ListModel m = l.getModel();
-                int index = l.locationToIndex(e.getPoint());
-                if (index > -1) {
-                    l.setToolTipText(m.getElementAt(index).toString());
+        data.addElement("test1");
+        data.addElement("test2");
+        data.addElement("test3");
 
-                }
+        myList = new JList(data);
+        myList.addListSelectionListener(new ListSelectionListener() {
+
+            public void valueChanged(ListSelectionEvent e) {
+                                       myList.clearSelection();
+
             }
         });
+        myList.addMouseListener(new Ecouteur());
         tp = new JTabbedPane();
         tp.setBounds(50, 50, 200, 200);
         JPanel p1 = new JPanel();
@@ -426,7 +415,7 @@ public class Buyer extends JFrame {
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, myList, tp);
         big.add("Center", splitPane);
-
+        big.addMouseListener(new Ecouteur());
         this.setJMenuBar(barreMenu);
         this.setTitle("Buyer");
         this.setContentPane(big);
@@ -438,24 +427,38 @@ public class Buyer extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (e.getSource() == jt) {
-                if (e.getButton() == e.BUTTON3) {//right click
-                    //affichage menu
-                    JPopupMenu pop = new JPopupMenu();
-                    JMenuItem sup = new JMenuItem("supprimer");
-                    sup.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent ae) {
-                            //model.supprimerPersonne(jt.getSelectedRow());
-                        }
-                    });
 
-                    pop.add(sup);
-                    pop.show(jt, e.getX(), e.getY());
+            if (e.getSource() == myList) {
+                popupmenu = new JPopupMenu("Edit");
+                JMenuItem cut = new JMenuItem("Supprimer");
+                cut.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        System.out.println(index);
 
+                    }
+
+                });
+                JMenuItem copy = new JMenuItem("Supprimer tous");
+                JMenuItem paste = new JMenuItem("Renommer");
+                popupmenu.add(cut);
+                popupmenu.add(copy);
+                popupmenu.add(paste);
+                myList.setSelectedIndex(myList.locationToIndex(e.getPoint()));
+                row = myList.getSelectedValue().toString();
+                if (SwingUtilities.isRightMouseButton(e) && myList.locationToIndex(e.getPoint()) == index) {
+
+                    if (!myList.isSelectionEmpty()) {
+
+                        popupmenu.show(myList, e.getX(), e.getY());
+                        //myList.setSelectedIndex(-1);
+
+                        //myList.clearSelection();
+                    }
                 }
+
             }
         }
-
     }
+
 }

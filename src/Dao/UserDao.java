@@ -80,19 +80,21 @@ public class UserDao implements CRUD<User> {
         int res = 0;
         if (con != null) {
             try {
-                st = con.prepareStatement("update user set user_name=?,user_email=?,user_password=?,user_type=?,user_phone=?,user_img=?");
+                st = con.prepareStatement("update user set user_name=?,user_email=?,user_password=?,user_type=?,user_phone=?,user_img=? where user_id=?");
                 st.setString(1, object.getUser_name());
                 st.setString(2, object.getUser_email());
                 st.setString(3, object.getUser_password());
                 st.setString(4, object.getUser_type());
                 st.setString(5, object.getUser_phone());
                 st.setString(6, object.getUser_img());
+                st.setInt(7, object.getUser_id());
+
                 res = st.executeUpdate();
                 if (res != 0) {
                     return res;
                 }
 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());
 
             }
@@ -146,7 +148,7 @@ public class UserDao implements CRUD<User> {
             st.setString(1, u.getUser_name());
             st.setString(2, u.getUser_password());
             rs = st.executeQuery();
-           
+
             while (rs.next()) {
 
                 user.setUser_email(rs.getString("user_email"));
