@@ -343,7 +343,7 @@ public class Buyer extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
-                tp.add("All orders", p1.add(new ProductAdd()));
+                tp.add("All orders", p1.add(new history(user)));
                 ////
                 String titleTab = "All orders";
                 int index = tp.indexOfTab(titleTab);

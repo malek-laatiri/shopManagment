@@ -29,7 +29,7 @@ public class OrderDao implements CRUD<Order> {
         long generatedKeys = 0;
         if (con != null) {
             try {
-                PreparedStatement ps = (PreparedStatement) con.prepareStatement("insert into orders(user_id,total_price) values (" + object.getUser_id() + ","+ object.getTotal_price() +")", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = (PreparedStatement) con.prepareStatement("insert into orders(user_id,total_price) values (" + object.getUser_id() + "," + object.getTotal_price() + ")", Statement.RETURN_GENERATED_KEYS);
                 //creer des requetes
                 res = ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
@@ -65,4 +65,41 @@ public class OrderDao implements CRUD<Order> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public ResultSet readAllById(int user_id) {
+        ResultSet rs = null;
+        Connection con = DbDao.getConnection();
+
+        try {
+            st = con.createStatement();
+
+            rs = st.executeQuery("select product_name,product_price,quantity,total_price,orders_created_at from orders o,product p,cart c\n"
+                    + "where o.user_id=" + user_id + " and o.orders_id=c.orders_id and c.product_id=p.product_id\n"
+                    + "order by total_price desc  ");
+            return rs;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
+        }
+
+        return rs;
+    }
+
+    public ResultSet dates(int user_id) {
+        ResultSet rs = null;
+        Connection con = DbDao.getConnection();
+
+        try {
+            st = con.createStatement();
+
+            rs = st.executeQuery("select orders_created_at from orders o,product p,cart c\n"
+                    + "where o.user_id=" + user_id + " and o.orders_id=c.orders_id and c.product_id=p.product_id\n"
+                    + "order by total_price desc");
+            return rs;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
+        }
+
+        return rs;
+    }
 }
