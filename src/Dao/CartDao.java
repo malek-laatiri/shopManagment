@@ -85,7 +85,7 @@ public class CartDao implements CRUD<Cart> {
         try {
             st = con.createStatement();
 
-            rs = st.executeQuery("select p.product_id,p.product_name,cart_id,quantity,product_price,product_img from cart c,product p where c.product_id=p.product_id and user_id=" + user_id);
+            rs = st.executeQuery("select p.product_id,p.product_name,cart_id,quantity,product_price,product_img from cart c,product p where ISNULL(c.orders_id)=1 and c.product_id=p.product_id and user_id=" + user_id);
             return rs;
         } catch (SQLException e) {
             System.out.println(e.getMessage());

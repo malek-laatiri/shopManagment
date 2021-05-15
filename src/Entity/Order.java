@@ -14,6 +14,16 @@ public class Order {
     private int orders_id;
     private int user_id;
     private String orders_created_at;
+    private Double total_price;
+
+    public Double getTotal_price() {
+        return total_price;
+    }
+
+    public void setTotal_price(Double total_price) {
+        this.total_price = total_price;
+    }
+    
 
     public int getOrders_id() {
         return orders_id;

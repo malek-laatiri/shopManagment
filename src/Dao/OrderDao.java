@@ -29,7 +29,7 @@ public class OrderDao implements CRUD<Order> {
         long generatedKeys = 0;
         if (con != null) {
             try {
-                PreparedStatement ps = (PreparedStatement) con.prepareStatement("insert into orders(user_id) values (" + object.getUser_id() + ")", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = (PreparedStatement) con.prepareStatement("insert into orders(user_id,total_price) values (" + object.getUser_id() + ","+ object.getTotal_price() +")", Statement.RETURN_GENERATED_KEYS);
                 //creer des requetes
                 res = ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();

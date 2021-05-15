@@ -9,7 +9,9 @@ import Dao.UserDao;
 import Entity.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -41,7 +43,7 @@ import javax.swing.JTextField;
 public class Login extends JFrame {
 
     JLabel lb_help_content, lb_help, lb_pass, lb_username, lb_login, lb_register;
-    JLabel lb_reg_username, lb_reg_email, lb_reg_password, lb_reg_phone, lb_reg_role, lb_reg_img;
+    JLabel header,lb_reg_username, lb_reg_email, lb_reg_password, lb_reg_phone, lb_reg_role, lb_reg_img;
     JPasswordField f_pass, f_reg_pass;
     JTextField f_username, f_reg_username, f_reg_email, f_reg_phone;
     JButton login, register, upload;
@@ -59,6 +61,8 @@ public class Login extends JFrame {
         pano.setBorder(BorderFactory.createTitledBorder("Login"));
 
         lb_username = new JLabel("Username");
+        lb_username.setFont(new Font("Serif", Font.BOLD, 20));
+
         pano.add(lb_username);
 
         f_username = new JTextField(10);
@@ -66,6 +70,8 @@ public class Login extends JFrame {
         pano.add(f_username);
 
         lb_pass = new JLabel("Password");
+        lb_pass.setFont(new Font("Serif", Font.BOLD, 20));
+
         pano.add(lb_pass);
 
         f_pass = new JPasswordField(10);
@@ -79,13 +85,29 @@ public class Login extends JFrame {
         big.add("North", pano);
 
         diff = new JPanel();
-        diff.setLayout(new GridLayout(7,0,10,10));
+         /**
+         * *******HEADER*****
+         */
+        header = new JLabel("Register");
+        header.setForeground(Color.decode("#ffa600"));
+        header.setBackground(Color.decode("#003f5c"));
+        header.setOpaque(true);
+        header.setHorizontalAlignment(JLabel.CENTER);
+        header.setFont(new Font("Serif", Font.PLAIN, 36));
+        header.setPreferredSize(new Dimension(400, 200));
+        diff.add(header);
+        /**
+         * *************
+         */
+        diff.setLayout(new GridLayout(8, 0, 10, 10));
         diff.setBorder(BorderFactory.createTitledBorder("Register"));
 
         JPanel username = new JPanel();
         username.setLayout(new FlowLayout());
 
         lb_reg_username = new JLabel("Username");
+        lb_reg_username.setFont(new Font("Serif", Font.BOLD, 20));
+
         lb_reg_username.addMouseListener(new Ecouteur());
         username.add(lb_reg_username);
 
@@ -98,6 +120,8 @@ public class Login extends JFrame {
         JPanel email = new JPanel();
         email.setLayout(new FlowLayout());
         lb_reg_email = new JLabel("Email");
+        lb_reg_email.setFont(new Font("Serif", Font.BOLD, 20));
+
         lb_reg_email.addMouseListener(new Ecouteur());
         email.add(lb_reg_email);
 
@@ -109,6 +133,8 @@ public class Login extends JFrame {
         JPanel password = new JPanel();
         password.setLayout(new FlowLayout());
         lb_reg_password = new JLabel("Password");
+        lb_reg_password.setFont(new Font("Serif", Font.BOLD, 20));
+
         lb_reg_password.addMouseListener(new Ecouteur());
         password.add(lb_reg_password);
 
@@ -120,6 +146,8 @@ public class Login extends JFrame {
         JPanel phone = new JPanel();
         phone.setLayout(new FlowLayout());
         lb_reg_phone = new JLabel("Phone");
+        lb_reg_phone.setFont(new Font("Serif", Font.BOLD, 20));
+
         phone.add(lb_reg_phone);
         lb_reg_phone.addMouseListener(new Ecouteur());
 
@@ -132,6 +160,8 @@ public class Login extends JFrame {
         JPanel role = new JPanel();
         role.setLayout(new FlowLayout());
         lb_reg_role = new JLabel("Role");
+        lb_reg_role.setFont(new Font("Serif", Font.BOLD, 20));
+
         role.add(lb_reg_role);
         lb_reg_role.addMouseListener(new Ecouteur());
 
@@ -152,6 +182,8 @@ public class Login extends JFrame {
         JPanel image = new JPanel();
         image.setLayout(new FlowLayout());
         lb_reg_img = new JLabel("Image");
+        lb_reg_img.setFont(new Font("Serif", Font.BOLD, 20));
+
         lb_reg_img.addMouseListener(new Ecouteur());
 
         image.add(lb_reg_img);
@@ -276,10 +308,10 @@ public class Login extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == upload) {
-                jfc = new JFileChooser("/");
+                jfc = new JFileChooser("/home/documents");
                 jfc.showOpenDialog(Login.this);
-                  ImageIcon img = new ImageIcon(jfc.getSelectedFile().getAbsolutePath());
-lb_reg_img.setIcon(img);
+                ImageIcon img = new ImageIcon(jfc.getSelectedFile().getAbsolutePath());
+                lb_reg_img.setIcon(img);
             }
             if (e.getSource() == login) {
 
@@ -328,7 +360,7 @@ lb_reg_img.setIcon(img);
                 user.setUser_img(jfc.getSelectedFile().getName());
                 Path source = Paths.get(jfc.getSelectedFile().getAbsolutePath());
                 Path target = Paths.get(System.getProperty("user.dir") + "/src/images/" + jfc.getSelectedFile().getName());
-                      
+
                 try {
                     Files.move(source, target);
                 } catch (Exception ex) {

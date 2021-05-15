@@ -38,7 +38,8 @@ public class ModelCart extends AbstractTableModel {
                 nbligne++;
                 Object[] ligne = new Object[rsmd.getColumnCount()];
                 for (int i = 0; i < ligne.length; i++) {
-                    if (i == 4) {
+                    if (i == 5) {
+                      
                         ImageIcon img = new ImageIcon(System.getProperty("user.dir") + "/src/images/" + rs.getObject(i + 1));
                         Image image = img.getImage(); // transform it 
                         Image newimg = image.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
@@ -135,5 +136,12 @@ public class ModelCart extends AbstractTableModel {
             }
         }
         return a;
+    }
+     @Override
+    public Class<?> getColumnClass(int column) {
+        if (column == 5) {
+            return ImageIcon.class;
+        }
+        return Object.class;
     }
 }

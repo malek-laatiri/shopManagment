@@ -12,22 +12,28 @@ import Entity.Order;
 import Entity.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -106,11 +112,14 @@ public class ConfirmOrder extends JPanel {
             if (ae.getSource() == confirm) {
                 Order order = new Order();
                 order.setUser_id(user1.getUser_id());
+                order.setTotal_price(totalPrice);
                 int insert = new OrderDao().create(order);
                 System.out.println(insert);
                 rs = (new CartDao().readAll(user1.getUser_id()));
 
                 try {
+                    File f = new File("filename.html");
+
                     FileWriter myWriter = new FileWriter("filename.html");
                     myWriter.write("<!DOCTYPE html>");
                     myWriter.write("<html lang='en'>");
@@ -285,6 +294,10 @@ public class ConfirmOrder extends JPanel {
                     myWriter.write("</html>");
                     myWriter.close();
                     System.out.println("Successfully wrote to the file.");
+                    Desktop.getDesktop().open(f);
+
+                    ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+                    JOptionPane.showMessageDialog(null, "Your purchase order is well received", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
                 } catch (IOException e) {
                     System.out.println("An error occurred.");
                     e.printStackTrace();

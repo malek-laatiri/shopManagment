@@ -71,3 +71,6 @@ create table cart(
     foreign key (product_id) references product(product_id)  ON DELETE CASCADE
 
 );
+
+ALTER TABLE shop.orders
+ADD total_price double;
