@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/malek/NetBeansProjects/shop/src/shop/Shop.java</file>
-            <file>file:/home/malek/NetBeansProjects/shop/src/IHM/Buyer.java</file>
+            <file>file:/home/malek/NetBeansProjects/shop/src/IHM/ViewProducts.java</file>
+            <file>file:/home/malek/NetBeansProjects/shop/src/Entity/Category.java</file>
+            <file>file:/home/malek/NetBeansProjects/shop/src/IHM/ViewProductsByCategory.java</file>
+            <file>file:/home/malek/NetBeansProjects/shop/src/Entity/Product.java</file>
         </group>
     </open-files>
 </project-private>

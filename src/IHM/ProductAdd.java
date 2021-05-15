@@ -9,8 +9,14 @@ import Dao.CategoryDao;
 import Dao.ProductDao;
 import Entity.Category;
 import Entity.Product;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -43,65 +49,67 @@ public class ProductAdd extends JPanel {
     JTextField inputName, inputPrice, inputStock;
     JTextArea inputDesc;
     JComboBox cat;
-    JLabel namelb, desclb, catlb, pricel, stocklb, imglb;
+    JLabel namelb, desclb, catlb, pricel, stocklb, imglb, header;
     JButton fichier, done;
     DefaultListModel model;
     JFileChooser jfc;
+    JPanel content, form;
 
     public ProductAdd() {
-        this.setLayout(new GridBagLayout());
+        this.setLayout(new BorderLayout());
+        /**
+         * *******HEADER*****
+         */
+        header = new JLabel("Add new product");
+        header.setForeground(Color.decode("#ffa600"));
+        header.setBackground(Color.decode("#003f5c"));
+        header.setOpaque(true);
+        header.setHorizontalAlignment(JLabel.CENTER);
+        header.setFont(new Font("Serif", Font.PLAIN, 36));
+        header.setPreferredSize(new Dimension(400, 200));
+        this.add("North", header);
+        /**
+         * *************
+         */
+        content = new JPanel();
+        content.setLayout(new BorderLayout());
+        form = new JPanel();
+        form.setLayout(new GridLayout(6, 2));
+        form.setBorder(BorderFactory.createTitledBorder("Add Product"));
 
-        GridBagConstraints c = new GridBagConstraints();
-        this.setBorder(BorderFactory.createTitledBorder("Add Product"));
-
-        c.fill = GridBagConstraints.BOTH;
-        c.insets = new Insets(10, 10, 10, 10);
         namelb = new JLabel("Name");
+        namelb.setFont(new Font("Serif", Font.BOLD, 20));
+
         desclb = new JLabel("Description");
+        desclb.setFont(new Font("Serif", Font.BOLD, 20));
+
         catlb = new JLabel("Category");
+        catlb.setFont(new Font("Serif", Font.BOLD, 20));
+
         pricel = new JLabel("Price");
+        pricel.setFont(new Font("Serif", Font.BOLD, 20));
+
         stocklb = new JLabel("Stock");
+        stocklb.setFont(new Font("Serif", Font.BOLD, 20));
+
         imglb = new JLabel("Image");
+        imglb.setFont(new Font("Serif", Font.BOLD, 20));
+
         fichier = new JButton("Upload image");
         inputName = new JTextField(10);
         inputPrice = new JTextField(10);
         inputStock = new JTextField(10);
         inputDesc = new JTextArea();
 
-        c.gridx = 1;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(namelb, c);
+        form.add(namelb);
 
-        c.gridx = 2;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(inputName, c);
+        form.add(inputName);
 
-        c.gridx = 1;
-        c.gridy = 2;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(desclb, c);
+        form.add(desclb);
 
-        c.gridx = 2;
-        c.gridy = 2;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(inputDesc, c);
+        form.add(inputDesc);
 
-        c.gridx = 1;
-        c.gridy = 3;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(catlb, c);
-
-        c.gridx = 2;
-        c.gridy = 3;
-        c.gridwidth = 1;
-        c.gridheight = 1;
+        form.add(catlb);
 
         ArrayList l = new ArrayList();
 
@@ -120,51 +128,26 @@ public class ProductAdd extends JPanel {
         }
         cat = new JComboBox(l.toArray());
         System.out.println(l.toArray());
-        this.add(cat, c);
+        form.add(cat);
 
-        c.gridx = 1;
-        c.gridy = 4;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(pricel, c);
+        form.add(pricel);
 
-        c.gridx = 2;
-        c.gridy = 4;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(inputPrice, c);
+        form.add(inputPrice);
 
-        c.gridx = 1;
-        c.gridy = 5;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(stocklb, c);
+        form.add(stocklb);
 
-        c.gridx = 2;
-        c.gridy = 5;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(inputStock, c);
+        form.add(inputStock);
 
-        c.gridx = 1;
-        c.gridy = 6;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        this.add(imglb, c);
+        form.add(imglb);
 
-        c.gridx = 2;
-        c.gridy = 6;
-        c.gridwidth = 1;
-        c.gridheight = 1;
         fichier.addActionListener(new Ecouteur());
-        this.add(fichier, c);
+        form.add(fichier);
         done = new JButton("Add product");
-        c.gridx = 1;
-        c.gridy = 7;
-        c.gridwidth = 2;
-        c.gridheight = 1;
+
         done.addActionListener(new Ecouteur());
-        this.add(done, c);
+        content.add("South", done);
+        content.add("Center", form);
+        this.add("Center", content);
 
     }
 

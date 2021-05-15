@@ -8,6 +8,7 @@ package IHM;
 import Dao.CartDao;
 import Entity.User;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -47,7 +48,7 @@ public class Buyer extends JFrame {
 
     JPopupMenu popupmenu;
     JMenuBar barreMenu;
-    JMenu products, currentOrder, history, profil;
+    JMenu products, currentOrder, history, profil,connect;
     JMenuItem allProducts, byCateg, confirm, viewProfile, updateProfile, disconnect, orders;
     JLabel lb_help, lb_help_content, lb_nom, lb_prenom, lb_pseudo, lb_star;
     JTextField f_nom, f_prenom, f_pseudo;
@@ -98,6 +99,8 @@ public class Buyer extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -144,6 +147,8 @@ public class Buyer extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -199,6 +204,8 @@ public class Buyer extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -246,6 +253,8 @@ public class Buyer extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
+               btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -293,6 +302,8 @@ public class Buyer extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -340,6 +351,8 @@ public class Buyer extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("X");
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -387,6 +400,8 @@ public class Buyer extends JFrame {
         barreMenu.add(currentOrder);
         barreMenu.add(history);
         barreMenu.add(profil);
+        connect=new JMenu("Chat");
+        barreMenu.add(connect);
         /**
          * *********CENTER********
          */
@@ -401,7 +416,7 @@ public class Buyer extends JFrame {
         myList.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
-                                       myList.clearSelection();
+                myList.clearSelection();
 
             }
         });

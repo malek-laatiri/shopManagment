@@ -10,8 +10,10 @@ import Dao.ProductDao;
 import Entity.Category;
 import Entity.Product;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,46 +36,59 @@ import javax.swing.JTextField;
  */
 public class CategoryAdd extends JPanel {
 
-    JLabel label;
+    JLabel label, header;
     JTextField input;
     JButton done;
     JPanel pano;
 
     public CategoryAdd() {
         this.setLayout(new BorderLayout());
+
+        /**
+         * *******HEADER*****
+         */
+        header = new JLabel("Add new category");
+        header.setForeground(Color.decode("#ff7c43"));
+        header.setBackground(Color.decode("#003f5c"));
+        header.setOpaque(true);
+        header.setHorizontalAlignment(JLabel.CENTER);
+        header.setFont(new Font("Serif", Font.PLAIN, 36));
+        header.setPreferredSize(new Dimension(400, 200));
+        this.add("North", header);
+        /**
+         * *************
+         */
         pano = new JPanel();
         pano.setBorder(BorderFactory.createTitledBorder("Add Category"));
 
         pano.setLayout(new FlowLayout());
         label = new JLabel("Category title");
+                label.setFont(new Font("Serif", Font.PLAIN, 20));
 
         pano.add(label);
-        input = new JTextField(10);
+        input = new JTextField(15);
         pano.add(input);
         done = new JButton("Add category");
         pano.add(done);
-                done.addActionListener(new Ecouteur());
+        done.addActionListener(new Ecouteur());
 
         this.add("Center", pano);
 
     }
-  class Ecouteur implements ActionListener {
+
+    class Ecouteur implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
 
-         
-             
-           Category category=new Category();
-           category.setCategory_name(input.getText());
+            Category category = new Category();
+            category.setCategory_name(input.getText());
 
-                if (new CategoryDao().create(category) != 0) {
-                    ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
-                    JOptionPane.showMessageDialog(null, "Insert Completed", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
-                }
+            if (new CategoryDao().create(category) != 0) {
+                ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+                JOptionPane.showMessageDialog(null, "Insert Completed", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
             }
-
-        
+        }
 
     }
 }

@@ -9,6 +9,7 @@ import Dao.CategoryDao;
 import Dao.ProductDao;
 import Entity.User;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -44,7 +45,7 @@ import javax.swing.event.ListSelectionListener;
 public class Seller extends JFrame {
 
     JMenuBar barreMenu;
-    JMenu produit, category, profil;
+    JMenu produit, category, profil,connect;
     JMenuItem addProd, addCategory, allProd, allCategory, viewProfile, updateProfile, disconnect;
     JLabel lb_help, lb_help_content, lb_nom, lb_prenom, lb_pseudo, lb_star;
     JTextField f_nom, f_prenom, f_pseudo;
@@ -72,7 +73,8 @@ public class Seller extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
-
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -119,13 +121,14 @@ public class Seller extends JFrame {
                 p1.setLayout(new FlowLayout());
                 String titleTab = "All products";
 
-                tp.add(titleTab, p1.add(scr));
+                tp.add(titleTab, p1.add(new allProducts()));
                 int index = tp.indexOfTab(titleTab);
                 JPanel pnlTab = new JPanel(new GridBagLayout());
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
-
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -177,7 +180,8 @@ public class Seller extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
-
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -212,21 +216,19 @@ public class Seller extends JFrame {
         allCategory.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                ModelCategory model = new ModelCategory(new CategoryDao().read());
-                jt = new JTable(model);
-                jt.addMouseListener(new Ecouteur());
-                scr = new JScrollPane(jt);//!!!!!
+                
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
                 String titleTab = "All categories";
 
-                tp.add(titleTab, p1.add(scr));
+                tp.add(titleTab, p1.add(new allCategories()));
                 int index = tp.indexOfTab(titleTab);
                 JPanel pnlTab = new JPanel(new GridBagLayout());
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
-
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -277,7 +279,8 @@ public class Seller extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
-
+                btnClose.setForeground(Color.WHITE);
+                btnClose.setBackground(Color.RED);
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -328,6 +331,8 @@ public class Seller extends JFrame {
         barreMenu.add(produit);
         barreMenu.add(category);
         barreMenu.add(profil);
+        connect=new JMenu("Chat");
+        barreMenu.add(connect);
         /**
          * *********CENTER********
          */
