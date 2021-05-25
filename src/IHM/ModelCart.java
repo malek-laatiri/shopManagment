@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import javax.swing.table.AbstractTableModel;
 import java.sql.*;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 
 /**
@@ -28,6 +29,8 @@ public class ModelCart extends AbstractTableModel {
     int nbc;
     ArrayList<Object[]> data = new ArrayList<Object[]>();
     CategoryDao pm;
+    ResultSet rs1;
+    DefaultListModel datars;
 
     public ModelCart(ResultSet rs) {
         super();
@@ -39,7 +42,7 @@ public class ModelCart extends AbstractTableModel {
                 Object[] ligne = new Object[rsmd.getColumnCount()];
                 for (int i = 0; i < ligne.length; i++) {
                     if (i == 5) {
-                      
+
                         ImageIcon img = new ImageIcon(System.getProperty("user.dir") + "/src/images/" + rs.getObject(i + 1));
                         Image image = img.getImage(); // transform it 
                         Image newimg = image.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
@@ -97,6 +100,20 @@ public class ModelCart extends AbstractTableModel {
         cart.setCart_id(Integer.parseInt(p[nameToIndice("cart_id")].toString()));
         cart.setQuantity(Integer.parseInt(p[nameToIndice("quantity")].toString()));
         pm.update(cart);
+        datars = new DefaultListModel();
+        rs1 = new CartDao().readAll(ConfirmOrder.user1.getUser_id());
+        try {
+            while (rs1.next()) {
+                int quantite = rs1.getInt("quantity");
+                Double price = rs1.getDouble("product_price");
+                datars.addElement(rs1.getInt("cart_id") + "." + rs1.getString("product_name") + "*" + rs1.getInt("quantity"));
+
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        Buyer.myList.setModel(datars);
     }
 
     @Override
@@ -120,11 +137,12 @@ public class ModelCart extends AbstractTableModel {
 
     void supprimerPersonne(int selectedRow) {
         Object[] p = data.get(selectedRow);
-        pm = new CategoryDao();
-        System.err.println(p[nameToIndice("numero")] + "");
-        pm.delete(Integer.parseInt(p[nameToIndice("numero")] + ""));
-        data.remove(selectedRow);
-        this.fireTableDataChanged();
+        //pm = new CategoryDao();
+        System.err.println(p[nameToIndice("cart_id")] + "");
+        new CartDao().delete(Integer.parseInt(p[nameToIndice("cart_id")] + ""));
+        //pm.delete(Integer.parseInt(p[nameToIndice("cart_id")] + ""));
+        //data.remove(selectedRow);
+        //this.fireTableDataChanged();
 
     }
 
@@ -137,7 +155,8 @@ public class ModelCart extends AbstractTableModel {
         }
         return a;
     }
-     @Override
+
+    @Override
     public Class<?> getColumnClass(int column) {
         if (column == 5) {
             return ImageIcon.class;

@@ -39,15 +39,17 @@ public class CartDao implements CRUD<Cart> {
 
     @Override
     public int delete(int id) {
+        Connection con = DbDao.getConnection();
+
         int res = 0;
         if (con != null) {
             try {
 
                 st = con.createStatement();
                 //creer des requetes
-                res = st.executeUpdate("delete from personne where numero=" + id);
+                res = st.executeUpdate("delete from cart where cart_id=" + id);
 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());
 
             }

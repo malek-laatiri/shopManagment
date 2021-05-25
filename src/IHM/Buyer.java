@@ -18,6 +18,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -48,7 +52,7 @@ public class Buyer extends JFrame {
 
     JPopupMenu popupmenu;
     JMenuBar barreMenu;
-    JMenu products, currentOrder, history, profil,connect;
+    JMenu products, currentOrder, history, profil, connect;
     JMenuItem allProducts, byCateg, confirm, viewProfile, updateProfile, disconnect, orders;
     JLabel lb_help, lb_help_content, lb_nom, lb_prenom, lb_pseudo, lb_star;
     JTextField f_nom, f_prenom, f_pseudo;
@@ -59,9 +63,10 @@ public class Buyer extends JFrame {
     JTabbedPane tp;
     JTable jt;
     JScrollPane scr;
-    JList myList;
+   static JList myList;
     String row = "";
     int index = 0;
+    ResultSet rs = null;
 
     public Buyer(User user) {
         barreMenu = new JMenuBar();
@@ -140,6 +145,7 @@ public class Buyer extends JFrame {
                 JPanel p1 = new JPanel();
                 p1.setLayout(new FlowLayout());
                 tp.add("Products by category", p1.add(new JScrollPane(new ViewProductsByCategory(user))));
+
                 ////
                 String titleTab = "Products by category";
                 int index = tp.indexOfTab(titleTab);
@@ -253,7 +259,7 @@ public class Buyer extends JFrame {
                 pnlTab.setOpaque(false);
                 JLabel lblTitle = new JLabel(titleTab);
                 JButton btnClose = new JButton("x");
-               btnClose.setForeground(Color.WHITE);
+                btnClose.setForeground(Color.WHITE);
                 btnClose.setBackground(Color.RED);
 
                 GridBagConstraints gbc = new GridBagConstraints();
@@ -400,7 +406,7 @@ public class Buyer extends JFrame {
         barreMenu.add(currentOrder);
         barreMenu.add(history);
         barreMenu.add(profil);
-        connect=new JMenu("Chat");
+        connect = new JMenu("Chat");
         barreMenu.add(connect);
         /**
          * *********CENTER********
@@ -408,15 +414,24 @@ public class Buyer extends JFrame {
         big = new JPanel();
         big.setLayout(new BorderLayout());
         data = new DefaultListModel();
-        data.addElement("test1");
-        data.addElement("test2");
-        data.addElement("test3");
+        rs = (new CartDao().readAll(user.getUser_id()));
+
+        try {
+            while (rs.next()) {
+                int quantite = rs.getInt("quantity");
+                Double price = rs.getDouble("product_price");
+                data.addElement(rs.getInt("cart_id") + "." + rs.getString("product_name") + "*" + rs.getInt("quantity"));
+
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
 
         myList = new JList(data);
         myList.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
-                myList.clearSelection();
+                //myList.clearSelection();
 
             }
         });
@@ -444,6 +459,21 @@ public class Buyer extends JFrame {
         public void mouseClicked(MouseEvent e) {
 
             if (e.getSource() == myList) {
+                if (e.getButton() == e.BUTTON3) {//right click
+                    //affichage menu
+                    JPopupMenu pop = new JPopupMenu();
+                    JMenuItem sup = new JMenuItem("supprimer");
+                    sup.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            //model.supprimerPersonne(jt.getSelectedRow());
+                        }
+                    });
+
+                    pop.add(sup);
+                    pop.show(myList, e.getX(), e.getY());
+
+                }
                 popupmenu = new JPopupMenu("Edit");
                 JMenuItem cut = new JMenuItem("Supprimer");
                 cut.addActionListener(new ActionListener() {
@@ -454,23 +484,6 @@ public class Buyer extends JFrame {
                     }
 
                 });
-                JMenuItem copy = new JMenuItem("Supprimer tous");
-                JMenuItem paste = new JMenuItem("Renommer");
-                popupmenu.add(cut);
-                popupmenu.add(copy);
-                popupmenu.add(paste);
-                myList.setSelectedIndex(myList.locationToIndex(e.getPoint()));
-                row = myList.getSelectedValue().toString();
-                if (SwingUtilities.isRightMouseButton(e) && myList.locationToIndex(e.getPoint()) == index) {
-
-                    if (!myList.isSelectionEmpty()) {
-
-                        popupmenu.show(myList, e.getX(), e.getY());
-                        //myList.setSelectedIndex(-1);
-
-                        //myList.clearSelection();
-                    }
-                }
 
             }
         }

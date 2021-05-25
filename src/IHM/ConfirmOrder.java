@@ -10,6 +10,7 @@ import Dao.OrderDao;
 import Dao.ProductDao;
 import Entity.Order;
 import Entity.User;
+import static IHM.Buyer.myList;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -20,6 +21,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,11 +33,15 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -51,7 +58,9 @@ public class ConfirmOrder extends JPanel {
     Double totalPrice = 0.0;
     ResultSet rs = null;
     JButton confirm;
-    User user1;
+    static User user1;
+    ModelCart model;
+    DefaultListModel data;
 
     public ConfirmOrder(User user) {
         user1 = user;
@@ -74,7 +83,7 @@ public class ConfirmOrder extends JPanel {
         total.setFont(new Font("Serif", Font.PLAIN, 36));
         total.setPreferredSize(new Dimension(400, 200));
         this.add("North", total);
-        ModelCart model = new ModelCart(new CartDao().readAll(user.getUser_id()));
+        model = new ModelCart(new CartDao().readAll(user.getUser_id()));
         TableModelEvent e = null;
 
         jt = new JTable(model);
@@ -96,8 +105,9 @@ public class ConfirmOrder extends JPanel {
                 }
             }
         });
+        jt.addMouseListener(new Ecouteur());
+
         jt.setRowHeight(200);
-        //jt.addMouseListener(new Seller.Ecouteur());
         scr = new JScrollPane(jt);//!!!!!
         this.add("Center", scr);
         confirm = new JButton("Confirm order");
@@ -105,7 +115,7 @@ public class ConfirmOrder extends JPanel {
         this.add("South", confirm);
     }
 
-    public class Ecouteur implements ActionListener {
+    public class Ecouteur extends MouseAdapter implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -306,5 +316,48 @@ public class ConfirmOrder extends JPanel {
             }
         }
 
+        public void mouseClicked(MouseEvent e) {
+            if (e.getSource() == jt) {
+                if (e.getButton() == e.BUTTON3) {//right click
+                    //affichage menu
+                    JPopupMenu pop = new JPopupMenu();
+                    JMenuItem sup = new JMenuItem("supprimer");
+                    sup.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            System.out.println(jt.getSelectedRow());
+                            model.supprimerPersonne(jt.getSelectedRow());
+                            model = new ModelCart(new CartDao().readAll(user1.getUser_id()));
+
+                            //jt = new JTable(model);
+                            jt.setModel(model);
+                            data = new DefaultListModel();
+
+                            rs = (new CartDao().readAll(user1.getUser_id()));
+
+                            try {
+                                while (rs.next()) {
+                                    int quantite = rs.getInt("quantity");
+                                    Double price = rs.getDouble("product_price");
+                                    data.addElement(rs.getInt("cart_id") + "." + rs.getString("product_name") + "*" + rs.getInt("quantity"));
+
+                                }
+                            } catch (SQLException ex) {
+                                System.out.println(ex.getMessage());
+                            }
+
+                            Buyer.myList.setModel(data);
+                            //scr = new JScrollPane(jt);//!!!!!
+
+                        }
+                    });
+
+                    pop.add(sup);
+                    pop.show(jt, e.getX(), e.getY());
+
+                }
+            }
+        }
     }
+
 }

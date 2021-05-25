@@ -19,8 +19,8 @@ public class Shop {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Connection db=DbDao.getConnection();
-         new Login().setVisible(true);
+        Connection db = DbDao.getConnection();
+        new Login().setVisible(true);
     }
-    
+
 }

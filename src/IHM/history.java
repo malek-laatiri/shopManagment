@@ -5,20 +5,20 @@
  */
 package IHM;
 
-import Dao.CategoryDao;
 import Dao.OrderDao;
-import Entity.Category;
 import Entity.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import static java.lang.Integer.parseInt;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -64,9 +64,9 @@ public class history extends JPanel {
 
         try {
             ResultSet rs = null;
-            rs = new OrderDao().dates(user.getUser_id());
+            rs = new OrderDao().readAllById(user.getUser_id());
             while (rs.next()) {
-              
+
                 l.add(rs.getString("orders_created_at"));
 
             }
@@ -74,13 +74,39 @@ public class history extends JPanel {
             System.err.println(ex.getMessage());
         }
         cat = new JComboBox(l.toArray());
+        cat.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                ModelOrder model = new ModelOrder(new OrderDao().dates(user.getUser_id(), (String) cat.getSelectedItem()));
+                jt = new JTable(model);
+                scr = new JScrollPane(jt);//!!!!!
+
+            }
+
+        });
+        price.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                if (price.isSelected()) {
+                    System.out.println("clicked");
+                    ModelOrder model = new ModelOrder(new OrderDao().prices(user.getUser_id()));
+                    jt = new JTable(model);
+                    scr = new JScrollPane(jt);//!!!!!
+                }
+
+            }
+
+        });
+        control.add(cat);
+        control.add(price);
 
         ModelCategory model = new ModelCategory(new OrderDao().readAllById(user.getUser_id()));
         jt = new JTable(model);
         jt.setRowHeight(200);
         //jt.addMouseListener(new Seller.Ecouteur());
         scr = new JScrollPane(jt);//!!!!!
-        this.add("Center", scr);
+        content.add("North", control);
+
+        content.add("Center", scr);
+        this.add("Center", content);
     }
 
 }

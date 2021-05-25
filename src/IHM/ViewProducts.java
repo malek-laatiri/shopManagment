@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -44,6 +45,7 @@ public class ViewProducts extends JPanel {
 
     JButton click;
     JLabel header;
+    DefaultListModel data;
 
     public ViewProducts(User user) {
         this.setLayout(new BorderLayout());
@@ -99,6 +101,22 @@ public class ViewProducts extends JPanel {
                             System.out.println(user.getUser_id());
                             cart.setUser_id(user.getUser_id());
                             new CartDao().create(cart);
+                                data = new DefaultListModel();
+
+                           ResultSet rs = (new CartDao().readAll(user.getUser_id()));
+
+                            try {
+                                while (rs.next()) {
+                                    int quantite = rs.getInt("quantity");
+                                    Double price = rs.getDouble("product_price");
+                                    data.addElement(rs.getInt("cart_id") + "." + rs.getString("product_name") + "*" + rs.getInt("quantity"));
+
+                                }
+                            } catch (SQLException ex) {
+                                System.out.println(ex.getMessage());
+                            }
+
+                            Buyer.myList.setModel(data);
                         } catch (Exception ex) {
                             ex.getMessage();
                         }
