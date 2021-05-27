@@ -87,7 +87,7 @@ public class Buyer extends JFrame {
         currentOrder.add(confirm);
         history.add(orders);
         profil.add(viewProfile);
-        profil.add(updateProfile);
+        //profil.add(updateProfile);
         profil.addSeparator();
         profil.add(disconnect);
 

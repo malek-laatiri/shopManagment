@@ -10,7 +10,6 @@ import Dao.OrderDao;
 import Dao.ProductDao;
 import Entity.Order;
 import Entity.User;
-import static IHM.Buyer.myList;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -23,11 +22,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -37,7 +34,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -308,6 +304,7 @@ public class ConfirmOrder extends JPanel {
 
                     ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
                     JOptionPane.showMessageDialog(null, "Your purchase order is well received", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
+                    Buyer.myList.setModel(new DefaultListModel());
                 } catch (IOException e) {
                     System.out.println("An error occurred.");
                     e.printStackTrace();

@@ -77,8 +77,8 @@ public class history extends JPanel {
         cat.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 ModelOrder model = new ModelOrder(new OrderDao().dates(user.getUser_id(), (String) cat.getSelectedItem()));
-                jt = new JTable(model);
-                scr = new JScrollPane(jt);//!!!!!
+                jt.setModel(model);
+                //scr = new JScrollPane(jt);//!!!!!
 
             }
 
@@ -88,8 +88,12 @@ public class history extends JPanel {
                 if (price.isSelected()) {
                     System.out.println("clicked");
                     ModelOrder model = new ModelOrder(new OrderDao().prices(user.getUser_id()));
-                    jt = new JTable(model);
-                    scr = new JScrollPane(jt);//!!!!!
+                    jt.setModel(model);
+                    //scr = new JScrollPane(jt);//!!!!!
+                } else {
+                    ModelCategory model = new ModelCategory(new OrderDao().readAllById(user.getUser_id()));
+                    jt.setModel(model);
+
                 }
 
             }

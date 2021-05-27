@@ -91,8 +91,8 @@ public class OrderDao implements CRUD<Order> {
         try {
             st = con.createStatement();
 
-            rs = st.executeQuery("select orders_created_at from orders o,product p,cart c\n"
-                    + "where orders_created_at="+date+" and  o.user_id=" + user_id + " and o.orders_id=c.orders_id and c.product_id=p.product_id\n"
+            rs = st.executeQuery("select product_name,product_price,quantity,total_price,orders_created_at from orders o,product p,cart c\n"
+                    + "where orders_created_at='"+date+"' and  o.user_id=" + user_id + " and o.orders_id=c.orders_id and c.product_id=p.product_id\n"
                     + "order by total_price desc");
             return rs;
         } catch (SQLException e) {
@@ -109,7 +109,7 @@ public class OrderDao implements CRUD<Order> {
         try {
             st = con.createStatement();
 
-            rs = st.executeQuery("select orders_created_at from orders o,product p,cart c\n"
+            rs = st.executeQuery("select product_name,product_price,quantity,total_price,orders_created_at from orders o,product p,cart c\n"
                     + "where o.user_id=" + user_id + " and o.orders_id=c.orders_id and c.product_id=p.product_id\n"
                     + "order by total_price asc");
             return rs;

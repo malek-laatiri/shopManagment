@@ -5,21 +5,28 @@
  */
 package IHM;
 
-import Dao.CategoryDao;
 import Dao.ProductDao;
 import Entity.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -316,7 +323,7 @@ public class Seller extends JFrame {
         updateProfile = new JMenuItem("Update profile");
         disconnect = new JMenuItem("disconnect");
         profil.add(viewProfile);
-        profil.add(updateProfile);
+        //profil.add(updateProfile);
         profil.addSeparator();
         profil.add(disconnect);
         disconnect.addActionListener(new ActionListener() {
