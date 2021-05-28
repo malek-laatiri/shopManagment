@@ -143,4 +143,25 @@ public int decrement(int quantity,int product_id){
         
         return rs;
 }
+
+ 
+    public ResultSet readByName(String name) {
+        Connection con = DbDao.getConnection();
+
+        ResultSet rs = null;
+        Statement st = null;
+            try {
+                st = con.createStatement();
+
+                rs = st.executeQuery("select product_id,product_name,product_description,product_stock,product_price,product_img,category_name from product,category where product.product_name='"+name+"' and product.product_category=category.category_id");
+                return rs;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+            }
+
+        
+        return rs;
+    }
+
 }

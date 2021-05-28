@@ -310,8 +310,8 @@ public class Login extends JFrame {
             if (e.getSource() == upload) {
                 jfc = new JFileChooser("/home/documents");
                 jfc.showOpenDialog(Login.this);
-                ImageIcon img = new ImageIcon(jfc.getSelectedFile().getAbsolutePath());
-                lb_reg_img.setIcon(img);
+                //ImageIcon img = new ImageIcon(jfc.getSelectedFile().getAbsolutePath());
+                //lb_reg_img.setIcon(img);
             }
             if (e.getSource() == login) {
 

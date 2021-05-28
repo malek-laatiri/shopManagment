@@ -17,11 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import static java.lang.Integer.parseInt;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,8 +35,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -53,7 +49,7 @@ public class Buyer extends JFrame {
     JPopupMenu popupmenu;
     JMenuBar barreMenu;
     JMenu products, currentOrder, history, profil, connect;
-    JMenuItem allProducts, byCateg, confirm, viewProfile, updateProfile, disconnect, orders;
+    JMenuItem allProducts, byCateg, confirm, viewProfile, updateProfile, disconnect, orders, chatbtn;
     JLabel lb_help, lb_help_content, lb_nom, lb_prenom, lb_pseudo, lb_star;
     JTextField f_nom, f_prenom, f_pseudo;
     JButton valider;
@@ -63,12 +59,14 @@ public class Buyer extends JFrame {
     JTabbedPane tp;
     JTable jt;
     JScrollPane scr;
-   static JList myList;
+    static JList myList;
     String row = "";
     int index = 0;
     ResultSet rs = null;
+    int userid;
 
     public Buyer(User user) {
+        userid = user.getUser_id();
         barreMenu = new JMenuBar();
         products = new JMenu("Products");
         currentOrder = new JMenu("Orders");
@@ -81,6 +79,7 @@ public class Buyer extends JFrame {
         updateProfile = new JMenuItem("Update profile");
         orders = new JMenuItem("All Orders");
         disconnect = new JMenuItem("Disconnect");
+        chatbtn = new JMenuItem("chat");
 
         products.add(allProducts);
         products.add(byCateg);
@@ -407,7 +406,18 @@ public class Buyer extends JFrame {
         barreMenu.add(history);
         barreMenu.add(profil);
         connect = new JMenu("Chat");
-        barreMenu.add(connect);
+        chatbtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+
+                new Window().setVisible(true);
+
+            }
+
+        });
+        //connect.add(chatbtn);
+
+        //barreMenu.add(connect);
         /**
          * *********CENTER********
          */
@@ -467,6 +477,26 @@ public class Buyer extends JFrame {
                         @Override
                         public void actionPerformed(ActionEvent ae) {
                             //model.supprimerPersonne(jt.getSelectedRow());
+                            System.out.println(myList.getSelectedValue());
+                            int iend = myList.getSelectedValue().toString().indexOf(".");
+                            new CartDao().delete(parseInt(myList.getSelectedValue().toString().substring(0, iend)));
+
+                            data = new DefaultListModel();
+
+                            rs = (new CartDao().readAll(userid));
+
+                            try {
+                                while (rs.next()) {
+                                    int quantite = rs.getInt("quantity");
+                                    Double price = rs.getDouble("product_price");
+                                    data.addElement(rs.getInt("cart_id") + "." + rs.getString("product_name") + "*" + rs.getInt("quantity"));
+
+                                }
+                            } catch (SQLException ex) {
+                                System.out.println(ex.getMessage());
+                            }
+
+                            Buyer.myList.setModel(data);
                         }
                     });
 
@@ -479,7 +509,6 @@ public class Buyer extends JFrame {
                 cut.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
-                        System.out.println(index);
 
                     }
 

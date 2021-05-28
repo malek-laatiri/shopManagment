@@ -338,8 +338,8 @@ public class Seller extends JFrame {
         barreMenu.add(produit);
         barreMenu.add(category);
         barreMenu.add(profil);
-        connect=new JMenu("Chat");
-        barreMenu.add(connect);
+        //connect=new JMenu("Chat");
+        //barreMenu.add(connect);
         /**
          * *********CENTER********
          */

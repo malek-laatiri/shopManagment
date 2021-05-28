@@ -165,18 +165,23 @@ public class ProductAdd extends JPanel {
                     ex.getMessage();
                 }
 
-                Product p = new Product();
-                p.setProduct_description(inputDesc.getText());
-                p.setProduct_img(jfc.getSelectedFile().getName());
-                p.setProduct_name(inputName.getText());
-                p.setProduct_price(Double.parseDouble(inputPrice.getText()));
-                p.setProduct_stock(parseInt(inputStock.getText()));
-                int iend = cat.getSelectedItem().toString().indexOf(".");
-                p.setProduct_category(parseInt(cat.getSelectedItem().toString().substring(0, iend)));
+                try {
+                    Product p = new Product();
+                    p.setProduct_description(inputDesc.getText());
+                    p.setProduct_img(jfc.getSelectedFile().getName());
+                    p.setProduct_name(inputName.getText());
+                    p.setProduct_price(Double.parseDouble(inputPrice.getText()));
+                    p.setProduct_stock(parseInt(inputStock.getText()));
+                    int iend = cat.getSelectedItem().toString().indexOf(".");
+                    p.setProduct_category(parseInt(cat.getSelectedItem().toString().substring(0, iend)));
 
-                if (new ProductDao().create(p) != 0) {
-                    ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
-                    JOptionPane.showMessageDialog(null, "Insert Completed", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
+                    if (new ProductDao().create(p) != 0) {
+                        ImageIcon icon = new ImageIcon(new ImageIcon("src/images/success.png").getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+                        JOptionPane.showMessageDialog(null, "Insert Completed", "Seccessful", JOptionPane.INFORMATION_MESSAGE, icon);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
                 }
             }
 
